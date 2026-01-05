@@ -34,6 +34,11 @@
             background: white;
             border-bottom: 4px solid var(--gs-green);
         }
+        .logo-img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 15px;
+        }
         .logo-text { 
             font-size: 2.2rem; 
             color: var(--gs-green); 
@@ -145,6 +150,10 @@
         .badge-blue { background: #e3f2fd; color: #1565c0; border: 1px solid #1565c0; }
         .badge-plain { background: #eee; color: #555; border: 1px solid #ccc; cursor: default; }
 
+        /* Cancel Button */
+        .cancel-btn { background: #d9534f; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-left: 5px; }
+        .cancel-btn:hover { background: #c62828; }
+
         /* Accounting Cards */
         .accounting-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
         .accounting-summary { color: white; padding: 20px; border-radius: 8px; text-align: center; }
@@ -156,14 +165,22 @@
         .supply-btn { background: var(--gs-blue); color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
         .supply-btn:hover { background: #0d47a1; }
         
-        .stock-input { width: 80px !important; padding: 5px !important; text-align: center; }
+        /* Stock List Styles */
+        .stock-list-container { background: white; border: 1px solid #eee; border-radius: 8px; overflow: hidden; margin-top: 10px; }
+        .stock-list-row { display: flex; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid #f0f0f0; align-items: center; }
+        .stock-list-row:last-child { border-bottom: none; }
+        .stock-list-row:nth-child(even) { background-color: #f9f9f9; }
+        .stock-list-name { font-weight: bold; color: var(--gs-brown); }
+        .stock-list-counts { color: #666; font-size: 0.95rem; }
+        .stock-input-row { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; align-items: center; margin-bottom: 10px; padding: 10px; border-bottom: 1px solid #eee; }
+        .stock-modal-input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; }
 
         /* Modal */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(54, 35, 22, 0.7); justify-content: center; align-items: center; z-index: 1000; 
         }
-        .modal { background: white; padding: 40px; border-radius: 8px; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
+        .modal { background: white; padding: 40px; border-radius: 8px; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 10px; right: 20px; cursor: pointer; font-size: 2rem; color: #999; }
         .close-modal:hover { color: #333; }
 
@@ -181,7 +198,9 @@
 
 <div class="container">
     <div class="logo-header">
-        <div class="logo-text">🍪 Girl Scout Cookie Dashboard</div>
+        <!-- IMAGE SRC SET TO LOCAL FILE -->
+        <img src="logo.png" alt="Girl Scouts Logo" class="logo-img" onerror="this.style.display='none'">
+        <div class="logo-text">Cookie Dashboard</div>
         <div class="sub-logo">Troop 48152 • 2026 Season</div>
     </div>
 
@@ -321,13 +340,16 @@
         <div id="admin-supply" class="admin-sub-view" style="display:none;">
             <p style="color:#666; margin-bottom:20px;">Manage cupboard inventory. Adding stock here automatically fulfills waiting orders.</p>
             
-            <!-- Table 0: Current Stock (New) -->
-            <div style="margin-bottom:30px; border:1px solid #ddd; padding:15px; border-radius:8px; background:#f0f8ff;">
-                <h3 style="color:var(--gs-green); margin-top:0;">Current Cupboard Stock (Available)</h3>
-                <div id="stock-container" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:10px;">
-                    <!-- Stock Inputs -->
+            <!-- Table 0: Current Stock (New Layout) -->
+            <div style="margin-bottom:30px; border:1px solid #ddd; padding:20px; border-radius:8px; background:#f0f8ff;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h3 style="color:var(--gs-green); margin:0;">Current Cupboard Stock (Available)</h3>
+                    <button class="action-btn" style="width:auto; margin:0; padding: 8px 16px; font-size: 0.9rem;" onclick="openStockModal()">Update Stock</button>
                 </div>
-                <button class="action-btn" style="width:auto; margin-top:15px;" onclick="saveStockCounts()">Update Stock Counts</button>
+                
+                <div id="stock-display-container" class="stock-list-container">
+                    <!-- Clean List Layout Injected Here -->
+                </div>
             </div>
 
             <!-- Table 1: Needing Submission -->
@@ -466,6 +488,34 @@
     </div>
 </div>
 
+<!-- Modal for Edit Stock -->
+<div id="stockModal" class="modal-overlay">
+    <div class="modal">
+        <span class="close-modal" onclick="closeStockModal()">&times;</span>
+        <h3 style="margin-top:0;">Update Inventory Counts</h3>
+        <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Enter total number of <strong>boxes</strong> currently in the cupboard.</p>
+        
+        <div id="stock-modal-inputs">
+            <!-- Inputs injected here -->
+        </div>
+        
+        <button class="action-btn" onclick="saveStockCounts()">Save & Update</button>
+    </div>
+</div>
+
+<!-- Modal for Confirmation (Cancel Order) -->
+<div id="confirmModal" class="modal-overlay">
+    <div class="modal" style="text-align:center;">
+        <span class="close-modal" onclick="closeConfirmModal()">&times;</span>
+        <h3 style="margin-top:0;">Are you sure?</h3>
+        <p style="color:#666; margin-bottom:20px;">This action cannot be undone.</p>
+        <div style="margin-top:20px;">
+            <button class="action-btn" style="background:#d9534f; width:45%; display:inline-block;" onclick="proceedWithCancel()">Yes, Cancel</button>
+            <button class="action-btn" style="background:#666; width:45%; display:inline-block; margin-left:10px;" onclick="closeConfirmModal()">No, Go Back</button>
+        </div>
+    </div>
+</div>
+
 <!-- Modal for Booth Signup -->
 <div id="signupModal" class="modal-overlay">
     <div class="modal">
@@ -477,7 +527,7 @@
         <label>Volunteer Name</label>
         <input type="text" id="volunteerName" placeholder="Your Name">
         
-        <label>Contact Email (Required for receipt)</label>
+        <label>Contact Email (Required)</label>
         <input type="text" id="volunteerContact" placeholder="email@example.com">
         
         <button class="action-btn" onclick="confirmSignup()">Confirm Sign Up</button>
@@ -554,7 +604,8 @@
     let isAdminLoggedIn = false; 
     let boothDataMap = {}; 
     let currentOrders = [];
-    let currentStock = {}; // Store current cupboard inventory
+    let currentStock = {}; 
+    let orderIdToCancel = null;
 
     // --- 1. UI FUNCTIONS (Attached directly to Window for robustness) ---
     
@@ -711,32 +762,57 @@
     }
 
     function renderStockTable() {
-        const container = document.getElementById('stock-container');
+        const container = document.getElementById('stock-display-container');
         if (!container) return;
         
         let html = "";
-        cookies.forEach((c, i) => {
+        cookies.forEach((c) => {
             let val = currentStock[c] || 0;
+            let cases = Math.floor(val / 12);
+            let leftover = val % 12;
+            let caseStr = cases > 0 ? `(${cases} cases${leftover > 0 ? `, ${leftover} boxes` : ''})` : '';
+            
             html += `
-                <div style="background:white; padding:10px; border-radius:4px; border:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.9rem;">${c}</span>
-                    <input type="number" id="stock-input-${i}" class="stock-input" value="${val}" min="0">
+                <div class="stock-list-row">
+                    <span class="stock-list-name">${c}</span>
+                    <span class="stock-list-counts"><strong>${val}</strong> boxes ${caseStr}</span>
                 </div>
             `;
         });
         container.innerHTML = html;
     }
 
+    window.openStockModal = () => {
+        const container = document.getElementById('stock-modal-inputs');
+        let html = "";
+        cookies.forEach((c, i) => {
+            let val = currentStock[c] || 0;
+            html += `
+                <div class="stock-input-row">
+                    <label style="margin:0;">${c}</label>
+                    <input type="number" id="modal-stock-${i}" class="stock-modal-input" value="${val}" min="0">
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        document.getElementById('stockModal').style.display = 'flex';
+    };
+
+    window.closeStockModal = () => {
+        document.getElementById('stockModal').style.display = 'none';
+    };
+
     window.saveStockCounts = async () => {
         let newStock = {};
         cookies.forEach((c, i) => {
-            const val = document.getElementById(`stock-input-${i}`).value;
+            const val = document.getElementById(`modal-stock-${i}`).value;
             newStock[c] = parseInt(val) || 0;
         });
 
         const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
         try {
             await setDoc(docRef, newStock);
+            window.closeStockModal();
             window.showMessage("Success", "Stock counts updated!");
             // After stock update, run check to fulfill pending orders
             window.autoFulfillOrders(newStock);
@@ -883,7 +959,7 @@
                 await setDoc(docRef, tempStock);
             }
 
-            window.showMessage("Success!", "Order Submitted Successfully!");
+            window.showMessage("Congratulations!", "Your order has been placed. Your troop leadership will be in touch with instructions.");
             document.getElementById('orderForm').reset();
             renderOrderForm();
             document.getElementById('totalPrice').innerText = "0";
@@ -1029,7 +1105,10 @@
                             <td>${dateStr}</td>
                             <td><strong>${d.customer}</strong><br><small>Troop: ${d.scout}</small></td>
                             <td>${summary}</td>
-                            <td><span class="status-badge badge-plain">Waiting for Inventory</span></td>
+                            <td>
+                                <span class="status-badge badge-plain">Waiting for Inventory</span>
+                                <button class="cancel-btn" onclick="window.cancelOrder('${d.id}')">Cancel</button>
+                            </td>
                         </tr>
                     `;
                 }
@@ -1041,7 +1120,10 @@
                             <td>${dateStr}</td>
                             <td><strong>${d.customer}</strong></td>
                             <td>${summary}</td>
-                            <td><span class="status-badge badge-blue">Ordered (Pending)</span></td>
+                            <td>
+                                <span class="status-badge badge-blue">Ordered (Pending)</span>
+                                <button class="cancel-btn" onclick="window.cancelOrder('${d.id}')">Cancel</button>
+                            </td>
                         </tr>
                     `;
                 }
@@ -1053,7 +1135,10 @@
                             <td>${dateStr}</td>
                             <td>${d.customer}</td>
                             <td>${summary}</td>
-                            <td><span class="status-badge badge-green" onclick="window.cycleStatus('${d.id}', 'statusPickup', '${d.statusPickup}')">Mark Picked Up</span></td>
+                            <td>
+                                <span class="status-badge badge-green" onclick="window.cycleStatus('${d.id}', 'statusPickup', '${d.statusPickup}')">Mark Picked Up</span>
+                                <button class="cancel-btn" onclick="window.cancelOrder('${d.id}')">Cancel</button>
+                            </td>
                         </tr>
                     `;
                 }
@@ -1112,6 +1197,30 @@
             tableSupplyOrdered.innerHTML = htmlSupplyOrdered || '<tr><td colspan="5" style="text-align:center;color:#999;">No pending shipments</td></tr>';
         });
     }
+
+    window.cancelOrder = (id) => {
+        orderIdToCancel = id;
+        document.getElementById('confirmModal').style.display = 'flex';
+    };
+
+    window.closeConfirmModal = () => {
+        document.getElementById('confirmModal').style.display = 'none';
+        orderIdToCancel = null;
+    };
+
+    window.proceedWithCancel = async () => {
+        if (!orderIdToCancel) return;
+        
+        try {
+            const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", orderIdToCancel);
+            await deleteDoc(ref);
+            window.closeConfirmModal();
+            window.showMessage("Order Cancelled", "The order has been removed.");
+        } catch (e) {
+            console.error(e);
+            window.showMessage("Error", "Failed to cancel order.");
+        }
+    };
 
     // --- BULK UPDATE LOGIC ---
     window.markBulkStatus = async (cookieType, oldStatus, newStatus) => {
