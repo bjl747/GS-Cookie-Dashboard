@@ -4,15 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 Girl Scout Cookie Dashboard</title>
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-       (function(){
-          // Initialize EmailJS with your Public Key
-          // REPLACE 'YOUR_PUBLIC_KEY' with your actual EmailJS public key
-          emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
-       })();
-    </script>
     <style>
         :root {
             /* Girl Scout Palette */
@@ -509,11 +500,6 @@
     import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, setDoc, deleteDoc, query, orderBy, arrayUnion, writeBatch, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
     import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-    // --- EMAILJS CONFIGURATION ---
-    const EMAILJS_SERVICE_ID = "YOUR_EMAILJS_SERVICE_ID";
-    const EMAILJS_TEMPLATE_ORDER_ID = "YOUR_EMAILJS_TEMPLATE_ID_ORDER";
-    const EMAILJS_TEMPLATE_BOOTH_ID = "YOUR_EMAILJS_TEMPLATE_ID_BOOTH";
-
     // --- GITHUB DEPLOYMENT CONFIGURATION ---
     let firebaseConfig;
     let usePreviewPaths = true; // Set to FALSE for GitHub deployment
@@ -897,16 +883,6 @@
                 await setDoc(docRef, tempStock);
             }
 
-            if (typeof emailjs !== 'undefined') {
-                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ORDER_ID, {
-                    to_name: customer,
-                    to_email: email, 
-                    reply_to: email, 
-                    order_summary: summaryText,
-                    total_cost: totalCost
-                });
-            }
-
             window.showMessage("Success!", "Order Submitted Successfully!");
             document.getElementById('orderForm').reset();
             renderOrderForm();
@@ -1234,15 +1210,8 @@
         const boothRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/booths` : "booths", id);
         try {
             await updateDoc(boothRef, { volunteers: arrayUnion({ name: name, contact: email }) });
-            if (typeof emailjs !== 'undefined') {
-                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_BOOTH_ID, {
-                    to_name: name,
-                    to_email: email, 
-                    reply_to: email, 
-                    booth_details: boothDetails
-                });
-            }
-            window.showMessage("Success", "Thanks for signing up! Confirmation email sent.");
+            
+            window.showMessage("Success", "Thanks for signing up!");
             window.closeModal();
         } catch (e) { console.error(e); window.showMessage("Error", "Error signing up."); }
     };
