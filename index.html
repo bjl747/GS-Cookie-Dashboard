@@ -84,6 +84,7 @@
             transition: background 0.2s;
         }
         button.action-btn:hover { background-color: #008c44; }
+        button.action-btn:disabled { background-color: #ccc; cursor: not-allowed; }
 
         /* Cookie Order Grid */
         .cookie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px; }
@@ -253,7 +254,7 @@
             <label>Email Address</label>
             <input type="email" id="email" placeholder="jane@example.com" required>
 
-            <button type="button" class="action-btn" onclick="submitOrder()">Submit Order</button>
+            <button type="button" id="submitBtn" class="action-btn" onclick="submitOrder()">Submit Order</button>
         </form>
     </div>
 
@@ -896,10 +897,16 @@
     window.submitOrder = async () => {
         if (!currentUser) return window.showMessage("System", "System connecting... please wait.");
         
-        const customer = document.getElementById('custName').value;
-        const scout = document.getElementById('gsName').value;
-        const contact = document.getElementById('contactNum').value;
-        const email = document.getElementById('email').value;
+        const btn = document.getElementById('submitBtn');
+        const customerInput = document.getElementById('custName');
+        const scoutInput = document.getElementById('gsName');
+        const contactInput = document.getElementById('contactNum');
+        const emailInput = document.getElementById('email');
+
+        const customer = customerInput.value;
+        const scout = scoutInput.value;
+        const contact = contactInput.value;
+        const email = emailInput.value;
 
         if(!customer || !scout || !contact || !email) return window.showMessage("Missing Info", "All contact fields are required.");
         if(!customer.includes(' ') || !scout.includes(' ')) return window.showMessage("Full Name Required", "Please enter both First and Last names.");
@@ -934,6 +941,12 @@
 
         if(totalBoxes === 0) return window.showMessage("Missing Info", "Please select at least one box of cookies.");
 
+        // DISABLE BUTTON HERE
+        if(btn) {
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+        }
+
         const totalCost = totalBoxes * BOX_PRICE;
         let initialStatus = canFulfill ? "In Stock" : "Needs Ordering";
 
@@ -960,12 +973,27 @@
             }
 
             window.showMessage("Thank You!", "Thank you for your order. Your troop leader will be in contact with more info soon.");
+            
+            // RESET FORM
             document.getElementById('orderForm').reset();
-            renderOrderForm();
+            renderOrderForm(); // Clears cookies
             document.getElementById('totalPrice').innerText = "0";
+            
+            // Explicitly clear inputs just in case
+            customerInput.value = "";
+            scoutInput.value = "";
+            contactInput.value = "";
+            emailInput.value = "";
+
         } catch (e) {
             console.error(e);
             window.showMessage("Error", "Error submitting order. Please try again.");
+        } finally {
+            // RE-ENABLE BUTTON
+            if(btn) {
+                btn.disabled = false;
+                btn.innerText = "Submit Order";
+            }
         }
     };
 
