@@ -222,7 +222,7 @@
     <!-- PUBLIC: Order Form -->
     <div id="order-tab" class="section">
         <h2>Place a Cookie Order</h2>
-        <p>All boxes are <strong>$6.00</strong> each.</p>
+        <p>Support our troop! All boxes are <strong>$6.00</strong> each.</p>
         
         <form id="orderForm">
             <div class="cookie-grid" id="cookie-list">
@@ -959,7 +959,7 @@
                 await setDoc(docRef, tempStock);
             }
 
-            window.showMessage("Congratulations!", "Your order has been placed. Your troop leadership will be in touch with instructions.");
+            window.showMessage("Thank You!", "Your order has been placed. Your Girl Scout leadership will reach out with more info soon.");
             document.getElementById('orderForm').reset();
             renderOrderForm();
             document.getElementById('totalPrice').innerText = "0";
