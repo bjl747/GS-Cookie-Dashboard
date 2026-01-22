@@ -1010,6 +1010,20 @@
             "Thin Mints", "Peanut Butter Patties", "Caramel deLites",
             "Peanut Butter Sandwich", "Caramel Choc Chip (GF)"
         ];
+
+        // Theme Colors
+        const cookieColors = {
+            "Adventurefuls": "#F2C84C", // Gold/Tan
+            "Toast-Yay!": "#F7C600",    // Toast Yellow
+            "Lemonades": "#FFF200",     // Bright Yellow
+            "Trefoils": "#008FAC",      // Blue
+            "Thin Mints": "#00A950",    // Green
+            "Peanut Butter Patties": "#EC1D25", // Red
+            "Caramel deLites": "#652D8A",       // Purple
+            "Peanut Butter Sandwich": "#F68D2E", // Orange
+            "Caramel Choc Chip (GF)": "#005596"  // Dark Blue
+        };
+
         const CASE_PRICE = 72;
         let currentUser = null;
         let isAdminLoggedIn = false;
@@ -1147,15 +1161,27 @@
         // --- 3. DATA FUNCTIONS ---
         function renderOrderForm() {
             const container = document.getElementById('cookie-list');
-            container.innerHTML = cookies.map((cookie, index) => `
-            <div class="cookie-card">
-                <div class="cookie-header">
-                    <span class="cookie-name">${cookie}</span>
-                    <input type="checkbox" id="chk-${index}" onchange="window.toggleInput(${index})" style="width:20px; height:20px;">
+            container.innerHTML = cookies.map((cookie, index) => {
+                const color = cookieColors[cookie] || "#eee";
+                // Determine text color for header (White for dark bgs, Brown for light bgs)
+                // Simple heuristic: lighter colors need dark text
+                const isLight = ["#FFF200", "#F2C84C", "#F7C600"].includes(color);
+                const textColor = isLight ? "#362316" : "white";
+                const borderColor = color;
+
+                return `
+            <div class="cookie-card" style="border: 2px solid ${borderColor}; padding:0; overflow:hidden;">
+                <div class="cookie-header" style="background-color: ${color}; color: ${textColor}; padding: 15px; margin:0;">
+                    <span class="cookie-name" style="color: ${textColor};">${cookie}</span>
+                    <input type="checkbox" id="chk-${index}" onchange="window.toggleInput(${index})" style="width:20px; height:20px; cursor:pointer;">
                 </div>
-                <input type="number" id="qty-${index}" placeholder="0" disabled min="0" oninput="window.calcTotal()" style="background:#f0f0f0;">
+                <div style="padding:20px;">
+                    <input type="number" id="qty-${index}" placeholder="0" disabled min="0" oninput="window.calcTotal()" style="background:#f0f0f0; width:100%;">
+                    <div style="text-align:right; font-size:0.8rem; color:#999; margin-top:5px;">Cases</div>
+                </div>
             </div>
-        `).join('');
+            `;
+            }).join('');
         }
 
         // --- STOCK MANAGEMENT ---
@@ -1180,9 +1206,13 @@
             let html = "";
             cookies.forEach((c) => {
                 let val = currentStock[c] || 0;
+                const color = cookieColors[c] || "#eee";
+                // Slightly transparent background for the row
+                // Simple hex to rgba conversion or just use opacity
+
                 html += `
-                <div class="stock-list-row">
-                    <span class="stock-list-name">${c}</span>
+                <div class="stock-list-row" style="background: linear-gradient(to right, ${color} 10px, white 10px); border-left: 1px solid #eee;">
+                    <span class="stock-list-name" style="padding-left:10px;">${c}</span>
                     <span class="stock-list-counts"><strong>${val}</strong> cases</span>
                 </div>
             `;
