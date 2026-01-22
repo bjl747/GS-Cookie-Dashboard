@@ -591,18 +591,46 @@
 
         <!-- Navigation -->
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('booth-tab')">📍 Booth Info & Signup</button>
+            <button class="tab-btn active" onclick="switchTab('order-tab')">📝 Order Cookies</button>
             <button class="tab-btn" onclick="switchTab('pickup-tab')">📅 Cookie Pickup</button>
-            <button class="tab-btn" onclick="switchTab('order-tab')">📝 Order Cookies</button>
+            <button class="tab-btn" onclick="switchTab('booth-tab')">📍 Booth Info & Signup</button>
             <button class="tab-btn admin-lock" onclick="checkAdmin()">🔒 Admin</button>
         </div>
 
-        <!-- PUBLIC: Booth Info & Signup -->
-        <div id="booth-tab" class="section active">
-            <h2>Upcoming Booth Locations</h2>
-            <p>We need your help to sell cookies! Sign up for a shift below.</p>
-            <div id="booths-loader" style="text-align:center; padding:20px; color:#666;">Loading schedule...</div>
-            <div id="booths-container"></div>
+        <!-- PUBLIC: Order Form -->
+        <div id="order-tab" class="section active">
+            <h2>Order Your Cookies</h2>
+            <p>Support our troop by ordering your favorite cookies below!</p>
+            <div
+                style="background:#fff; padding:15px; border-radius:8px; margin-bottom:20px; border:1px solid #ddd; text-align:center;">
+                <span style="font-size:1.2rem; font-weight:bold; color:var(--gs-green);">Price: $72.00 / Case</span>
+                <br><span style="font-size:0.9rem; color:#666;">(12 Boxes per Case)</span>
+            </div>
+            <div id="cookie-list"></div>
+
+            <div class="total-container">
+                <div>
+                    Total
+                    <span id="totalCasesDisplay"
+                        style="font-weight:normal; font-size:0.9rem; margin-left:10px; color:#555;">0 Cases</span>
+                </div>
+                <div id="totalPrice">$0.00</div>
+            </div>
+
+            <div class="form-group">
+                <label>Parent/Guardian Name</label>
+                <input type="text" id="orderParentName" placeholder="Your Name">
+            </div>
+            <div class="form-group">
+                <label>Scout Name</label>
+                <input type="text" id="orderScoutName" placeholder="Girl Scout's Name">
+            </div>
+            <div class="form-group">
+                <label>Contact Email</label>
+                <input type="email" id="orderEmail" placeholder="email@example.com">
+            </div>
+
+            <button class="action-btn" id="submitOrderBtn" onclick="submitOrder()">Submit Order</button>
         </div>
 
         <!-- PUBLIC: Cookie Pickup -->
@@ -613,45 +641,12 @@
             <div id="pickup-container"></div>
         </div>
 
-        <!-- PUBLIC: Order Form -->
-        <div id="order-tab" class="section">
-            <h2>Place a Cookie Order</h2>
-            <p>Orders must be in full cases. Each case is <strong>$72.00</strong>.</p>
-
-            <form id="orderForm">
-                <div class="cookie-grid" id="cookie-list">
-                    <!-- Cookies will be generated here by JS -->
-                </div>
-
-                <div class="total-container">
-                    <div>Total</div>
-                    <div class="total-price">
-                        <span id="totalCasesDisplay" style="font-size: 1.2rem; color: #555;">0 Cases</span> • $<span
-                            id="totalPrice">0</span>
-                    </div>
-                </div>
-
-                <h3 style="margin-top:30px; border-top:1px solid #eee; padding-top:20px;">Contact Information</h3>
-                <p style="font-size:0.9rem; color:#666;">All fields are required to place an order.</p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <label>Parent/Guardian Full Name</label>
-                        <input type="text" id="custName" placeholder="First & Last Name" required>
-                    </div>
-                    <div>
-                        <label>Girl Scout's Full Name</label>
-                        <input type="text" id="gsName" placeholder="First & Last Name" required>
-                    </div>
-                </div>
-
-                <label>Contact Number</label>
-                <input type="text" id="contactNum" placeholder="(555) 123-4567" required>
-
-                <label>Email Address</label>
-                <input type="email" id="email" placeholder="jane@example.com" required>
-
-                <button type="button" id="submitBtn" class="action-btn" onclick="submitOrder()">Submit Order</button>
-            </form>
+        <!-- PUBLIC: Booth Info & Signup -->
+        <div id="booth-tab" class="section">
+            <h2>Upcoming Booth Locations</h2>
+            <p>We need your help to sell cookies! Sign up for a shift below.</p>
+            <div id="booths-loader" style="text-align:center; padding:20px; color:#666;">Loading schedule...</div>
+            <div id="booths-container"></div>
         </div>
 
         <!-- ADMIN: Dashboard (Password Protected Area) -->
@@ -1176,9 +1171,9 @@
             if (target) target.classList.add('active');
 
             const btns = document.querySelectorAll('.tab-btn');
-            if (tabId === 'booth-tab') btns[0].classList.add('active');
+            if (tabId === 'order-tab') btns[0].classList.add('active');
             if (tabId === 'pickup-tab') btns[1].classList.add('active');
-            if (tabId === 'order-tab') btns[2].classList.add('active');
+            if (tabId === 'booth-tab') btns[2].classList.add('active');
             if (tabId === 'admin-tab') btns[3].classList.add('active');
         };
 
