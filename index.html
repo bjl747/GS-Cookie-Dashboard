@@ -1005,24 +1005,30 @@
         initAuth();
 
         // --- GLOBAL DATA ---
-        const cookies = [
-            "Adventurefuls", "Toast-Yay!", "Lemonades", "Trefoils",
-            "Thin Mints", "Peanut Butter Patties", "Caramel deLites",
-            "Peanut Butter Sandwich", "Caramel Choc Chip (GF)"
-        ];
-
         // Theme Colors
         const cookieColors = {
-            "Adventurefuls": "#F2C84C", // Gold/Tan
-            "Toast-Yay!": "#F7C600",    // Toast Yellow
-            "Lemonades": "#FFF200",     // Bright Yellow
-            "Trefoils": "#008FAC",      // Blue
-            "Thin Mints": "#00A950",    // Green
-            "Peanut Butter Patties": "#EC1D25", // Red
-            "Caramel deLites": "#652D8A",       // Purple
-            "Peanut Butter Sandwich": "#F68D2E", // Orange
-            "Caramel Choc Chip (GF)": "#005596"  // Dark Blue
+            "Adventurefuls®": "#D4B37E",        // Tan/Gold
+            "Caramel Chocolate Chip": "#00558C", // Dark Blue
+            "Caramel deLites®": "#602D89",      // Purple
+            "Exploremores™": "#F28E86",         // Salmon Pink
+            "Lemonades®": "#FFF200",            // Bright Yellow
+            "Peanut Butter Patties®": "#DA291C",// Red
+            "Peanut Butter Sandwich": "#F6821F",// Orange
+            "Thin Mints®": "#00A94F",           // Green
+            "Trefoils®": "#0077C8"              // Blue
         };
+
+        const cookies = [
+            "Adventurefuls®",
+            "Caramel Chocolate Chip",
+            "Caramel deLites®",
+            "Exploremores™",
+            "Lemonades®",
+            "Peanut Butter Patties®",
+            "Peanut Butter Sandwich",
+            "Thin Mints®",
+            "Trefoils®"
+        ];
 
         const CASE_PRICE = 72;
         let currentUser = null;
@@ -1165,7 +1171,8 @@
                 const color = cookieColors[cookie] || "#eee";
                 // Determine text color for header (White for dark bgs, Brown for light bgs)
                 // Simple heuristic: lighter colors need dark text
-                const isLight = ["#FFF200", "#F2C84C", "#F7C600"].includes(color);
+                // Determine text color for header (White for dark bgs, Brown for light bgs)
+                const isLight = ["#FFF200", "#F2C84C", "#F7C600", "#D4B37E", "#F28E86", "#F6821F"].includes(color);
                 const textColor = isLight ? "#362316" : "white";
                 const borderColor = color;
 
