@@ -1447,8 +1447,9 @@
                         statusHtml = `<span class="shift-status status-needed">⚠️ Need ${parts.join(', ')}</span>`;
                     }
 
+                    const safeLoc = b.location.replace(/'/g, "\\'");
                     let btnHtml = (remainingAdults > 0 || remainingScouts > 0)
-                        ? `<button class="signup-btn" onclick="window.openSignup('${b.id}', '${b.location}', '${formatDate(b.date)} ${b.start}')">Sign Up</button>`
+                        ? `<button class="signup-btn" onclick="window.openSignup('${b.id}', '${safeLoc}', '${formatDate(b.date)} ${b.start}')">Sign Up</button>`
                         : ``;
 
                     html += `
