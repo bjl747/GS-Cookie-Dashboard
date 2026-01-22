@@ -1236,23 +1236,13 @@
             const container = document.getElementById('cookie-list');
             container.innerHTML = cookies.map((cookie, index) => {
                 const color = cookieColors[cookie] || "#eee";
-                // Determine text color for header (White for dark bgs, Brown for light bgs)
-                // Simple heuristic: lighter colors need dark text
-                // Determine text color for header (White for dark bgs, Brown for light bgs)
-                const isLight = ["#FFF200", "#F2C84C", "#F7C600", "#D4B37E", "#F28E86", "#F6821F"].includes(color);
-                const textColor = isLight ? "#362316" : "white";
-                const borderColor = color;
-
                 return `
-            <div class="cookie-card" style="border: 2px solid ${borderColor}; padding:0; overflow:hidden;">
-                <div class="cookie-header" style="background-color: ${color}; color: ${textColor}; padding: 15px; margin:0;">
-                    <span class="cookie-name" style="color: ${textColor};">${cookie}</span>
+            <div class="cookie-card" style="border-left: 8px solid ${color};">
+                <div class="cookie-header">
+                    <span class="cookie-name">${cookie}</span>
                     <input type="checkbox" id="chk-${index}" onchange="window.toggleInput(${index})" style="width:20px; height:20px; cursor:pointer;">
                 </div>
-                <div style="padding:20px;">
-                    <input type="number" id="qty-${index}" placeholder="0" disabled min="0" oninput="window.calcTotal()" style="background:#f0f0f0; width:100%;">
-                    <div style="text-align:right; font-size:0.8rem; color:#999; margin-top:5px;">Cases</div>
-                </div>
+                <input type="number" id="qty-${index}" placeholder="0" disabled min="0" oninput="window.calcTotal()" style="background:#f0f0f0;">
             </div>
             `;
             }).join('');
