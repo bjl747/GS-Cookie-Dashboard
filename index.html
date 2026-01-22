@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <style>
         :root {
             /* Girl Scout Palette */
-            --gs-green: #00AE58; 
+            --gs-green: #00AE58;
             --gs-brown: #362316;
             --gs-blue: #005696;
             --bg-light: #f9f9f9;
@@ -24,31 +25,55 @@
         }
 
         /* Layout & Typography */
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        h1, h2, h3 { color: var(--gs-green); margin-bottom: 10px; font-weight: bold; }
-        
-        .logo-header { 
-            text-align: center; 
-            margin-bottom: 30px; 
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: var(--gs-green);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .logo-header {
+            text-align: center;
+            margin-bottom: 30px;
             padding: 20px;
             background: white;
             border-bottom: 4px solid var(--gs-green);
         }
+
         .logo-img {
             max-width: 100px;
             height: auto;
             margin-bottom: 10px;
         }
-        .logo-text { 
-            font-size: 2.2rem; 
-            color: var(--gs-green); 
-            letter-spacing: 1px; 
+
+        .logo-text {
+            font-size: 2.2rem;
+            color: var(--gs-green);
+            letter-spacing: 1px;
             font-weight: bold;
         }
-        .sub-logo { color: var(--gs-brown); font-style: italic; font-size: 1.2rem; }
+
+        .sub-logo {
+            color: var(--gs-brown);
+            font-style: italic;
+            font-size: 1.2rem;
+        }
 
         /* Navigation Tabs */
-        .nav-tabs { display: flex; gap: 5px; margin-bottom: 0; flex-wrap: wrap; }
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+        }
+
         .tab-btn {
             padding: 12px 24px;
             background: #e0e0e0;
@@ -61,273 +86,691 @@
             color: #555;
             transition: all 0.2s;
         }
-        .tab-btn:hover { background: #d0d0d0; }
-        .tab-btn.active { background: var(--white); color: var(--gs-green); border-top: 4px solid var(--gs-green); }
-        .tab-btn.admin-lock { background: var(--gs-brown); color: white; margin-left: auto; }
-        .tab-btn.admin-lock:hover { background: #4a301e; }
+
+        .tab-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .tab-btn.active {
+            background: var(--white);
+            color: var(--gs-green);
+            border-top: 4px solid var(--gs-green);
+        }
+
+        .tab-btn.admin-lock {
+            background: var(--gs-brown);
+            color: white;
+            margin-left: auto;
+        }
+
+        .tab-btn.admin-lock:hover {
+            background: #4a301e;
+        }
 
         /* Content Sections */
-        .section { display: none; background: var(--white); padding: 30px; border-radius: 0 8px 8px 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); min-height: 400px; }
-        .section.active { display: block; }
+        .section {
+            display: none;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 0 8px 8px 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            min-height: 400px;
+        }
+
+        .section.active {
+            display: block;
+        }
 
         /* Forms & Inputs */
-        label { display: block; margin-top: 15px; font-weight: bold; color: var(--gs-brown); }
-        input[type="text"], input[type="number"], input[type="email"], input[type="date"], input[type="time"], input[type="password"] {
-            width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: var(--font-main); font-size: 1rem;
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: var(--gs-brown);
         }
-        input:focus { outline: none; border-color: var(--gs-green); box-shadow: 0 0 0 2px rgba(0,174,88,0.2); }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="date"],
+        input[type="time"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: var(--font-main);
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--gs-green);
+            box-shadow: 0 0 0 2px rgba(0, 174, 88, 0.2);
+        }
 
         button.action-btn {
-            background-color: var(--gs-green); color: white; border: none; padding: 12px 20px;
-            border-radius: 5px; cursor: pointer; font-size: 1.1rem; margin-top: 20px; width: 100%;
-            font-family: var(--font-main); font-weight: bold;
+            background-color: var(--gs-green);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            width: 100%;
+            font-family: var(--font-main);
+            font-weight: bold;
             transition: background 0.2s;
         }
-        button.action-btn:hover { background-color: #008c44; }
-        button.action-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        button.action-btn:hover {
+            background-color: #008c44;
+        }
+
+        button.action-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
 
         /* Cookie Order Grid */
-        .cookie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px; }
-        .cookie-card { 
-            border: 1px solid #eee; padding: 20px; border-radius: 8px; background: #fafafa; 
-            display: flex; flex-direction: column;
+        .cookie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
         }
-        .cookie-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .cookie-name { font-weight: bold; font-size: 1.1rem; color: var(--gs-brown); }
-        
-        /* Total Box */
-        .total-container { 
-            background: #e8f5e9; padding: 20px; border-radius: 8px; text-align: center; 
-            margin-top: 30px; border: 1px solid var(--gs-green);
+
+        .cookie-card {
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 8px;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
         }
-        .total-price { font-size: 2rem; color: var(--gs-green); font-weight: bold; }
+
+        .cookie-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .cookie-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--gs-brown);
+        }
+
+        /* Total Case */
+        .total-container {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 30px;
+            border: 1px solid var(--gs-green);
+        }
+
+        .total-price {
+            font-size: 2rem;
+            color: var(--gs-green);
+            font-weight: bold;
+        }
 
         /* Booth Cards */
-        .booth-card { 
-            border-left: 6px solid var(--gs-green); background: #fff; margin-bottom: 20px; 
-            padding: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eee;
+        .booth-card {
+            border-left: 6px solid var(--gs-green);
+            background: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
         }
-        .booth-meta { font-size: 1.3rem; font-weight: bold; color: var(--gs-brown); margin-bottom: 5px; }
-        .booth-address { font-size: 1rem; color: #555; margin-bottom: 15px; font-style: italic; }
-        .booth-date { color: #666; font-style: italic; margin-bottom: 5px; }
-        
-        .shift-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            background: #f9f9f9; padding: 12px; margin-top: 8px; border-radius: 6px; border: 1px solid #eee;
+
+        .booth-meta {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--gs-brown);
+            margin-bottom: 5px;
         }
-        .shift-time { font-weight: bold; color: var(--gs-blue); }
-        .shift-status { font-weight: bold; font-size: 0.95rem; }
-        .status-needed { color: #d9534f; } /* Red for needed */
-        .status-full { color: var(--gs-green); } /* Green for full */
-        
+
+        .booth-address {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .booth-date {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .shift-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .shift-time {
+            font-weight: bold;
+            color: var(--gs-blue);
+        }
+
+        .shift-status {
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .status-needed {
+            color: #d9534f;
+        }
+
+        /* Red for needed */
+        .status-full {
+            color: var(--gs-green);
+        }
+
+        /* Green for full */
+
         .signup-btn {
-            padding: 6px 12px; background: var(--gs-green); color: white; border: none; 
-            border-radius: 4px; cursor: pointer; font-family: var(--font-main);
+            padding: 6px 12px;
+            background: var(--gs-green);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--font-main);
         }
 
         /* Admin Styles */
-        .admin-sub-nav { margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
-        .admin-sub-btn { 
-            background: none; border: none; font-size: 1rem; color: #666; cursor: pointer; 
-            padding: 5px 15px; font-family: var(--font-main);
+        .admin-sub-nav {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
         }
-        .admin-sub-btn.active { color: var(--gs-brown); font-weight: bold; text-decoration: underline; }
 
-        .inventory-section { margin-bottom: 40px; border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
-        .inventory-header { background: #f4f4f4; padding: 10px 15px; font-weight: bold; color: var(--gs-green); border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; }
-        
-        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        th, td { border-bottom: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: var(--gs-green); color: white; }
-        tr:nth-child(even) { background-color: #fcfcfc; }
-
-        .status-badge { 
-            padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; cursor: pointer; 
-            display: inline-block; min-width: 80px; text-align: center; font-weight: bold; user-select: none;
+        .admin-sub-btn {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: #666;
+            cursor: pointer;
+            padding: 5px 15px;
+            font-family: var(--font-main);
         }
-        .badge-red { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
-        .badge-green { background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
-        .badge-yellow { background: #fff3e0; color: #ef6c00; border: 1px solid #ef6c00; }
-        .badge-blue { background: #e3f2fd; color: #1565c0; border: 1px solid #1565c0; }
-        .badge-plain { background: #eee; color: #555; border: 1px solid #ccc; cursor: default; }
+
+        .admin-sub-btn.active {
+            color: var(--gs-brown);
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .inventory-section {
+            margin-bottom: 40px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .inventory-header {
+            background: #f4f4f4;
+            padding: 10px 15px;
+            font-weight: bold;
+            color: var(--gs-green);
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--gs-green);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .badge-red {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #c62828;
+        }
+
+        .badge-green {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #2e7d32;
+        }
+
+        .badge-yellow {
+            background: #fff3e0;
+            color: #ef6c00;
+            border: 1px solid #ef6c00;
+        }
+
+        .badge-blue {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #1565c0;
+        }
+
+        .badge-plain {
+            background: #eee;
+            color: #555;
+            border: 1px solid #ccc;
+            cursor: default;
+        }
 
         /* Cancel Button */
-        .cancel-btn { background: #d9534f; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-left: 5px; }
-        .cancel-btn:hover { background: #c62828; }
+        .cancel-btn {
+            background: #d9534f;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
+        .cancel-btn:hover {
+            background: #c62828;
+        }
 
         /* Accounting Cards */
-        .accounting-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
-        .accounting-summary { color: white; padding: 20px; border-radius: 8px; text-align: center; }
-        .accounting-val { font-size: 2rem; font-weight: bold; }
-        .acc-red { background: #d9534f; }
-        .acc-green { background: var(--gs-green); }
+        .accounting-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .accounting-summary {
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .accounting-val {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .acc-red {
+            background: #d9534f;
+        }
+
+        .acc-green {
+            background: var(--gs-green);
+        }
 
         /* Supply Tab Tables */
-        .supply-btn { background: var(--gs-blue); color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
-        .supply-btn:hover { background: #0d47a1; }
-        
+        .supply-btn {
+            background: var(--gs-blue);
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .supply-btn:hover {
+            background: #0d47a1;
+        }
+
         /* Stock List Styles */
-        .stock-list-container { background: white; border: 1px solid #eee; border-radius: 8px; overflow: hidden; margin-top: 10px; }
-        .stock-list-row { display: flex; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid #f0f0f0; align-items: center; }
-        .stock-list-row:last-child { border-bottom: none; }
-        .stock-list-row:nth-child(even) { background-color: #f9f9f9; }
-        .stock-list-name { font-weight: bold; color: var(--gs-brown); }
-        .stock-list-counts { color: #666; font-size: 0.95rem; }
-        .stock-input-row { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; align-items: center; margin-bottom: 10px; padding: 10px; border-bottom: 1px solid #eee; }
-        .stock-modal-input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; }
+        .stock-list-container {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .stock-list-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+
+        .stock-list-row:last-child {
+            border-bottom: none;
+        }
+
+        .stock-list-row:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .stock-list-name {
+            font-weight: bold;
+            color: var(--gs-brown);
+        }
+
+        .stock-list-counts {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .stock-input-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stock-modal-input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
 
         /* Modal */
-        .modal-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(54, 35, 22, 0.7); justify-content: center; align-items: center; z-index: 1000; 
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(54, 35, 22, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
-        .modal { background: white; padding: 40px; border-radius: 8px; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; max-height: 90vh; overflow-y: auto; }
-        .close-modal { position: absolute; top: 10px; right: 20px; cursor: pointer; font-size: 2rem; color: #999; }
-        .close-modal:hover { color: #333; }
+
+        .modal {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 2rem;
+            color: #999;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
 
         /* Responsive */
         @media (max-width: 600px) {
-            .nav-tabs { flex-direction: column; }
-            .tab-btn { border-radius: 0; width: 100%; text-align: left; }
-            .shift-row { flex-direction: column; gap: 10px; align-items: flex-start; }
-            .signup-btn { width: 100%; }
-            th, td { padding: 8px; font-size: 0.8rem; }
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                border-radius: 0;
+                width: 100%;
+                text-align: left;
+            }
+
+            .shift-row {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .signup-btn {
+                width: 100%;
+            }
+
+            th,
+            td {
+                padding: 8px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="logo-header">
-        <!-- IMAGE SRC SET TO LOCAL FILE -->
-        <img src="logo.png" alt="Girl Scouts Logo" class="logo-img" onerror="this.style.display='none'">
-        <div class="logo-text">Cookie Dashboard</div>
-        <div class="sub-logo">Troop 48152 • 2026 Season</div>
-    </div>
-
-    <!-- Navigation -->
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('booth-tab')">📍 Booth Info & Signup</button>
-        <button class="tab-btn" onclick="switchTab('order-tab')">📝 Order Cookies</button>
-        <button class="tab-btn admin-lock" onclick="checkAdmin()">🔒 Admin</button>
-    </div>
-
-    <!-- PUBLIC: Booth Info & Signup -->
-    <div id="booth-tab" class="section active">
-        <h2>Upcoming Booth Locations</h2>
-        <p>We need your help to sell cookies! Sign up for a shift below.</p>
-        <div id="booths-loader" style="text-align:center; padding:20px; color:#666;">Loading schedule...</div>
-        <div id="booths-container"></div>
-    </div>
-
-    <!-- PUBLIC: Order Form -->
-    <div id="order-tab" class="section">
-        <h2>Place a Cookie Order</h2>
-        <p>All boxes are <strong>$6.00</strong> each.</p>
-        
-        <form id="orderForm">
-            <div class="cookie-grid" id="cookie-list">
-                <!-- Cookies will be generated here by JS -->
-            </div>
-
-            <div class="total-container">
-                <div>Estimated Total</div>
-                <div class="total-price">$<span id="totalPrice">0</span></div>
-            </div>
-            
-            <h3 style="margin-top:30px; border-top:1px solid #eee; padding-top:20px;">Contact Information</h3>
-            <p style="font-size:0.9rem; color:#666;">All fields are required to place an order.</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div>
-                    <label>Parent/Guardian Full Name</label>
-                    <input type="text" id="custName" placeholder="First & Last Name" required>
-                </div>
-                <div>
-                    <label>Girl Scout's Full Name</label>
-                    <input type="text" id="gsName" placeholder="First & Last Name" required>
-                </div>
-            </div>
-            
-            <label>Contact Number</label>
-            <input type="text" id="contactNum" placeholder="(555) 123-4567" required>
-            
-            <label>Email Address</label>
-            <input type="email" id="email" placeholder="jane@example.com" required>
-
-            <button type="button" id="submitBtn" class="action-btn" onclick="submitOrder()">Submit Order</button>
-        </form>
-    </div>
-
-    <!-- ADMIN: Dashboard (Password Protected Area) -->
-    <div id="admin-tab" class="section">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid var(--gs-green); padding-bottom:15px; margin-bottom:20px;">
-            <h2 style="margin:0;">Cookie Queens Dashboard</h2>
-            <button onclick="logoutAdmin()" style="padding:8px 15px; background:#666; color:white; border:none; border-radius:4px; cursor:pointer;">Log Out</button>
+    <div class="container">
+        <div class="logo-header">
+            <!-- IMAGE SRC SET TO LOCAL FILE -->
+            <img src="logo.png" alt="Girl Scouts Logo" class="logo-img" onerror="this.style.display='none'">
+            <div class="logo-text">Cookie Dashboard</div>
+            <div class="sub-logo">Troop 48152 • 2026 Season</div>
         </div>
 
-        <div class="admin-sub-nav">
-            <button class="admin-sub-btn active" onclick="switchAdminSub('admin-orders', this)">Orders</button>
-            <button class="admin-sub-btn" onclick="switchAdminSub('admin-supply', this)">Inventory</button>
-            <button class="admin-sub-btn" onclick="switchAdminSub('admin-accounting', this)">Accounting</button>
-            <button class="admin-sub-btn" onclick="switchAdminSub('admin-booths', this)">Manage Booths</button>
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('booth-tab')">📍 Booth Info & Signup</button>
+            <button class="tab-btn" onclick="switchTab('order-tab')">📝 Order Cookies</button>
+            <button class="tab-btn admin-lock" onclick="checkAdmin()">🔒 Admin</button>
         </div>
 
-        <!-- Admin: Orders View -->
-        <div id="admin-orders" class="admin-sub-view">
-            <p style="color:#666; font-style:italic; margin-bottom:20px;">Note: Order status updates automatically based on Inventory stock.</p>
-            
-            <!-- Section 1: New Orders -->
-            <div class="inventory-section">
-                <div class="inventory-header">
-                    <span>🟠 New Orders (Waiting for Inventory Action)</span>
+        <!-- PUBLIC: Booth Info & Signup -->
+        <div id="booth-tab" class="section active">
+            <h2>Upcoming Booth Locations</h2>
+            <p>We need your help to sell cookies! Sign up for a shift below.</p>
+            <div id="booths-loader" style="text-align:center; padding:20px; color:#666;">Loading schedule...</div>
+            <div id="booths-container"></div>
+        </div>
+
+        <!-- PUBLIC: Order Form -->
+        <div id="order-tab" class="section">
+            <h2>Place a Cookie Order</h2>
+            <p>Orders must be in full cases. Each case is <strong>$72.00</strong>.</p>
+
+            <form id="orderForm">
+                <div class="cookie-grid" id="cookie-list">
+                    <!-- Cookies will be generated here by JS -->
                 </div>
-                <div style="overflow-x:auto;">
-                    <table id="table-new-orders">
+
+                <div class="total-container">
+                    <div>Total</div>
+                    <div class="total-price">
+                        <span id="totalCasesDisplay" style="font-size: 1.2rem; color: #555;">0 Cases</span> • $<span
+                            id="totalPrice">0</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:30px; border-top:1px solid #eee; padding-top:20px;">Contact Information</h3>
+                <p style="font-size:0.9rem; color:#666;">All fields are required to place an order.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label>Parent/Guardian Full Name</label>
+                        <input type="text" id="custName" placeholder="First & Last Name" required>
+                    </div>
+                    <div>
+                        <label>Girl Scout's Full Name</label>
+                        <input type="text" id="gsName" placeholder="First & Last Name" required>
+                    </div>
+                </div>
+
+                <label>Contact Number</label>
+                <input type="text" id="contactNum" placeholder="(555) 123-4567" required>
+
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="jane@example.com" required>
+
+                <button type="button" id="submitBtn" class="action-btn" onclick="submitOrder()">Submit Order</button>
+            </form>
+        </div>
+
+        <!-- ADMIN: Dashboard (Password Protected Area) -->
+        <div id="admin-tab" class="section">
+            <div
+                style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid var(--gs-green); padding-bottom:15px; margin-bottom:20px;">
+                <h2 style="margin:0;">Cookie Queens Dashboard</h2>
+                <button onclick="logoutAdmin()"
+                    style="padding:8px 15px; background:#666; color:white; border:none; border-radius:4px; cursor:pointer;">Log
+                    Out</button>
+            </div>
+
+            <div class="admin-sub-nav">
+                <button class="admin-sub-btn active" onclick="switchAdminSub('admin-orders', this)">Orders</button>
+                <button class="admin-sub-btn" onclick="switchAdminSub('admin-supply', this)">Inventory</button>
+                <button class="admin-sub-btn" onclick="switchAdminSub('admin-accounting', this)">Accounting</button>
+                <button class="admin-sub-btn" onclick="switchAdminSub('admin-booths', this)">Manage Booths</button>
+            </div>
+
+            <!-- Admin: Orders View -->
+            <div id="admin-orders" class="admin-sub-view">
+                <p style="color:#666; font-style:italic; margin-bottom:20px;">Note: Order status updates automatically
+                    based on Inventory stock.</p>
+
+                <!-- Section 1: New Orders -->
+                <div class="inventory-section">
+                    <div class="inventory-header">
+                        <span>🟠 New Orders (Waiting for Inventory Action)</span>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table id="table-new-orders">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer / Scout</th>
+                                    <th>Order Details</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section 2: Pending Fulfillment -->
+                <div class="inventory-section">
+                    <div class="inventory-header">
+                        <span>🔵 Pending Fulfillment (Ordered, Waiting for Delivery)</span>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table id="table-pending-fulfillment">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer / Scout</th>
+                                    <th>Order Details</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section 3: Order Ready -->
+                <div class="inventory-section">
+                    <div class="inventory-header">
+                        <span>🟢 Order Ready (In Stock - Awaiting Pickup)</span>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table id="table-order-ready">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin: Inventory View -->
+            <div id="admin-supply" class="admin-sub-view" style="display:none;">
+                <p style="color:#666; margin-bottom:20px;">Manage cupboard inventory. Adding stock here automatically
+                    fulfills waiting orders.</p>
+
+                <!-- Table 0: Current Stock (New Layout) -->
+                <div
+                    style="margin-bottom:30px; border:1px solid #ddd; padding:20px; border-radius:8px; background:#f0f8ff;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3 style="color:var(--gs-green); margin:0;">Current Cupboard Stock (Available)</h3>
+                        <button class="action-btn" style="width:auto; margin:0; padding: 8px 16px; font-size: 0.9rem;"
+                            onclick="openStockModal()">Update Stock</button>
+                    </div>
+
+                    <div id="stock-display-container" class="stock-list-container">
+                        <!-- Clean List Layout Injected Here -->
+                    </div>
+                </div>
+
+                <!-- Table 1: Needing Submission -->
+                <h3 style="color:#ef6c00;">Needs Ordering from Cupboard</h3>
+                <div style="overflow-x:auto; margin-bottom:30px;">
+                    <table id="table-supply-needs">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Customer / Scout</th>
-                                <th>Order Details</th>
-                                <th>Status</th>
+                                <th>Cookie Type</th>
+                                <th>Total Cases Needed</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
-            </div>
 
-            <!-- Section 2: Pending Fulfillment -->
-            <div class="inventory-section">
-                <div class="inventory-header">
-                    <span>🔵 Pending Fulfillment (Ordered, Waiting for Delivery)</span>
-                </div>
+                <!-- Table 2: Pending Receipt -->
+                <h3 style="color:var(--gs-blue);">Ordered & Pending Receipt</h3>
                 <div style="overflow-x:auto;">
-                    <table id="table-pending-fulfillment">
+                    <table id="table-supply-ordered">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Customer / Scout</th>
-                                <th>Order Details</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Section 3: Order Ready -->
-            <div class="inventory-section">
-                <div class="inventory-header">
-                    <span>🟢 Order Ready (In Stock - Awaiting Pickup)</span>
-                </div>
-                <div style="overflow-x:auto;">
-                    <table id="table-order-ready">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Customer</th>
-                                <th>Items</th>
+                                <th>Cookie Type</th>
+                                <th>Order Date</th>
+                                <th>Total Cases Expected</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -335,408 +778,376 @@
                     </table>
                 </div>
             </div>
-        </div>
 
-        <!-- Admin: Inventory View -->
-        <div id="admin-supply" class="admin-sub-view" style="display:none;">
-            <p style="color:#666; margin-bottom:20px;">Manage cupboard inventory. Adding stock here automatically fulfills waiting orders.</p>
-            
-            <!-- Table 0: Current Stock (New Layout) -->
-            <div style="margin-bottom:30px; border:1px solid #ddd; padding:20px; border-radius:8px; background:#f0f8ff;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <h3 style="color:var(--gs-green); margin:0;">Current Cupboard Stock (Available)</h3>
-                    <button class="action-btn" style="width:auto; margin:0; padding: 8px 16px; font-size: 0.9rem;" onclick="openStockModal()">Update Stock</button>
-                </div>
-               
-                <div id="stock-display-container" class="stock-list-container">
-                    <!-- Clean List Layout Injected Here -->
-                </div>
-            </div>
-
-            <!-- Table 1: Needing Submission -->
-            <h3 style="color:#ef6c00;">Needs Ordering from Cupboard</h3>
-            <div style="overflow-x:auto; margin-bottom:30px;">
-                <table id="table-supply-needs">
-                    <thead>
-                        <tr>
-                            <th>Cookie Type</th>
-                            <th>Total Boxes Needed</th>
-                            <th>Cases Needed (12/case)</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-
-            <!-- Table 2: Pending Receipt -->
-            <h3 style="color:var(--gs-blue);">Ordered & Pending Receipt</h3>
-            <div style="overflow-x:auto;">
-                <table id="table-supply-ordered">
-                    <thead>
-                        <tr>
-                            <th>Cookie Type</th>
-                            <th>Order Date</th>
-                            <th>Total Boxes Expected</th>
-                            <th>Cases Expected</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Admin: Accounting View -->
-        <div id="admin-accounting" class="admin-sub-view" style="display:none;">
-            <div class="accounting-cards">
-                <div class="accounting-summary acc-red">
-                    <div>Outstanding Balance (Unpaid)</div>
-                    <div class="accounting-val" id="total-outstanding">$0.00</div>
-                </div>
-                <div class="accounting-summary acc-green">
-                    <div>Total Revenue Collected</div>
-                    <div class="accounting-val" id="total-collected">$0.00</div>
-                </div>
-            </div>
-
-            <!-- Table 1: Unpaid -->
-            <h3 style="margin-top:20px; color:#d9534f;">Unpaid / Outstanding Orders</h3>
-            <div style="overflow-x:auto;">
-                <table id="table-unpaid">
-                    <thead>
-                        <tr>
-                            <th>Customer</th>
-                            <th>Total</th>
-                            <th>Payment</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-
-            <!-- Table 2: Paid -->
-            <h3 style="margin-top:30px; color:var(--gs-green);">Paid / Closed Orders</h3>
-            <div style="overflow-x:auto;">
-                <table id="table-paid">
-                    <thead>
-                        <tr>
-                            <th>Customer</th>
-                            <th>Total</th>
-                            <th>Payment</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Admin: Booth Management -->
-        <div id="admin-booths" class="admin-sub-view" style="display:none;">
-            <div style="background:#f9f9f9; padding:20px; border:1px solid #ddd; border-radius:8px; margin-bottom:30px;">
-                <h3 style="margin-top:0;">Add / Edit Booth Shift</h3>
-                <input type="hidden" id="editingBoothId">
-               
-                <label>Location Name (e.g., Walmart North)</label>
-                <input type="text" id="newBoothLoc">
-               
-                <label>Address</label>
-                <input type="text" id="newBoothAddress" placeholder="123 Cookie Lane">
-               
-                <div style="display:flex; gap:20px;">
-                    <div style="flex:1;">
-                        <label>Date</label>
-                        <input type="date" id="newBoothDate">
+            <!-- Admin: Accounting View -->
+            <div id="admin-accounting" class="admin-sub-view" style="display:none;">
+                <div class="accounting-cards">
+                    <div class="accounting-summary acc-red">
+                        <div>Outstanding Balance (Unpaid)</div>
+                        <div class="accounting-val" id="total-outstanding">$0.00</div>
                     </div>
-                    <div style="flex:1;">
-                        <label>Volunteers Needed</label>
-                        <input type="number" id="newBoothNeeded" value="2" min="1">
+                    <div class="accounting-summary acc-green">
+                        <div>Total Revenue Collected</div>
+                        <div class="accounting-val" id="total-collected">$0.00</div>
                     </div>
                 </div>
 
-                <div style="display:flex; gap:20px;">
-                    <div style="flex:1;">
-                        <label>Start Time</label>
-                        <input type="time" id="newBoothStart">
-                    </div>
-                    <div style="flex:1;">
-                        <label>End Time</label>
-                        <input type="time" id="newBoothEnd">
-                    </div>
+                <!-- Table 1: Unpaid -->
+                <h3 style="margin-top:20px; color:#d9534f;">Unpaid / Outstanding Orders</h3>
+                <div style="overflow-x:auto;">
+                    <table id="table-unpaid">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
 
-                <button id="boothSubmitBtn" class="action-btn" onclick="saveBooth()">Add Booth Shift</button>
-                <button id="boothCancelBtn" class="action-btn" style="background:#666; display:none; margin-top:10px;" onclick="cancelEditBooth()">Cancel Edit</button>
+                <!-- Table 2: Paid -->
+                <h3 style="margin-top:30px; color:var(--gs-green);">Paid / Closed Orders</h3>
+                <div style="overflow-x:auto;">
+                    <table id="table-paid">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
 
-            <h3>Current Schedule</h3>
-            <div id="admin-booth-list"></div>
+            <!-- Admin: Booth Management -->
+            <div id="admin-booths" class="admin-sub-view" style="display:none;">
+                <div
+                    style="background:#f9f9f9; padding:20px; border:1px solid #ddd; border-radius:8px; margin-bottom:30px;">
+                    <h3 style="margin-top:0;">Add / Edit Booth Shift</h3>
+                    <input type="hidden" id="editingBoothId">
+
+                    <label>Location Name (e.g., Walmart North)</label>
+                    <input type="text" id="newBoothLoc">
+
+                    <label>Address</label>
+                    <input type="text" id="newBoothAddress" placeholder="123 Cookie Lane">
+
+                    <div style="display:flex; gap:20px;">
+                        <div style="flex:1;">
+                            <label>Date</label>
+                            <input type="date" id="newBoothDate">
+                        </div>
+                        <div style="display:flex; gap:20px;">
+                            <div style="flex:1;">
+                                <label>Adults Needed</label>
+                                <input type="number" id="newBoothNeededAdults" value="1" min="0">
+                            </div>
+                            <div style="flex:1;">
+                                <label>Scouts Needed</label>
+                                <input type="number" id="newBoothNeededScouts" value="2" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:20px;">
+                        <div style="flex:1;">
+                            <label>Start Time</label>
+                            <input type="time" id="newBoothStart">
+                        </div>
+                        <div style="flex:1;">
+                            <label>End Time</label>
+                            <input type="time" id="newBoothEnd">
+                        </div>
+                    </div>
+
+                    <button id="boothSubmitBtn" class="action-btn" onclick="saveBooth()">Add Booth Shift</button>
+                    <button id="boothCancelBtn" class="action-btn"
+                        style="background:#666; display:none; margin-top:10px;" onclick="cancelEditBooth()">Cancel
+                        Edit</button>
+                </div>
+
+                <h3>Current Schedule</h3>
+                <div id="admin-booth-list"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal for Admin Login -->
-<div id="loginModal" class="modal-overlay">
-    <div class="modal">
-        <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-        <h3>Troop Leader Login</h3>
-        <p>Please enter the password to access the admin dashboard.</p>
-        <input type="password" id="adminPassInput" placeholder="Password">
-        <p id="loginError" style="color:#d9534f; display:none; margin-top:10px;">❌ Incorrect Password</p>
-        <button class="action-btn" onclick="attemptLogin()">Login</button>
-    </div>
-</div>
-
-<!-- Modal for Edit Stock -->
-<div id="stockModal" class="modal-overlay">
-    <div class="modal">
-        <span class="close-modal" onclick="closeStockModal()">&times;</span>
-        <h3 style="margin-top:0;">Update Inventory Counts</h3>
-        <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Enter total number of <strong>boxes</strong> currently in the cupboard.</p>
-        
-        <div id="stock-modal-inputs">
-            <!-- Inputs injected here -->
-        </div>
-        
-        <button class="action-btn" onclick="saveStockCounts()">Save & Update</button>
-    </div>
-</div>
-
-<!-- Modal for Confirmation (Cancel Order) -->
-<div id="confirmModal" class="modal-overlay">
-    <div class="modal" style="text-align:center;">
-        <span class="close-modal" onclick="closeConfirmModal()">&times;</span>
-        <h3 style="margin-top:0;">Are you sure?</h3>
-        <p style="color:#666; margin-bottom:20px;">This action cannot be undone.</p>
-        <div style="margin-top:20px;">
-            <button class="action-btn" style="background:#d9534f; width:45%; display:inline-block;" onclick="proceedWithCancel()">Yes, Cancel</button>
-            <button class="action-btn" style="background:#666; width:45%; display:inline-block; margin-left:10px;" onclick="closeConfirmModal()">No, Go Back</button>
+    <!-- Modal for Admin Login -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h3>Troop Leader Login</h3>
+            <p>Please enter the password to access the admin dashboard.</p>
+            <input type="password" id="adminPassInput" placeholder="Password">
+            <p id="loginError" style="color:#d9534f; display:none; margin-top:10px;">❌ Incorrect Password</p>
+            <button class="action-btn" onclick="attemptLogin()">Login</button>
         </div>
     </div>
-</div>
 
-<!-- Modal for Booth Signup -->
-<div id="signupModal" class="modal-overlay">
-    <div class="modal">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <h3>Sign Up to Help</h3>
-        <p id="modal-booth-details" style="font-weight:bold; color:var(--gs-blue);"></p>
-        <input type="hidden" id="modal-booth-id">
-        
-        <label>Volunteer Name</label>
-        <input type="text" id="volunteerName" placeholder="Your Name">
-        
-        <label>Contact Email (Required)</label>
-        <input type="text" id="volunteerContact" placeholder="email@example.com">
-        
-        <button class="action-btn" onclick="confirmSignup()">Confirm Sign Up</button>
+    <!-- Modal for Edit Stock -->
+    <div id="stockModal" class="modal-overlay">
+        <div class="modal">
+            <span class="close-modal" onclick="closeStockModal()">&times;</span>
+            <h3 style="margin-top:0;">Update Inventory Counts</h3>
+            <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Enter total number of <strong>cases</strong>
+                currently in the cupboard.</p>
+
+            <div id="stock-modal-inputs">
+                <!-- Inputs injected here -->
+            </div>
+
+            <button class="action-btn" onclick="saveStockCounts()">Save & Update</button>
+        </div>
     </div>
-</div>
 
-<!-- Generic Message Modal (Replaces Alert) -->
-<div id="messageModal" class="modal-overlay">
-    <div class="modal" style="text-align:center;">
-        <span class="close-modal" onclick="closeMessageModal()">&times;</span>
-        <h3 id="msgTitle">Notification</h3>
-        <p id="msgBody"></p>
-        <button class="action-btn" onclick="closeMessageModal()">OK</button>
+    <!-- Modal for Confirmation (Cancel Order) -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal" style="text-align:center;">
+            <span class="close-modal" onclick="closeConfirmModal()">&times;</span>
+            <h3 style="margin-top:0;">Are you sure?</h3>
+            <p style="color:#666; margin-bottom:20px;">This action cannot be undone.</p>
+            <div style="margin-top:20px;">
+                <button class="action-btn" style="background:#d9534f; width:45%; display:inline-block;"
+                    onclick="proceedWithCancel()">Yes, Cancel</button>
+                <button class="action-btn" style="background:#666; width:45%; display:inline-block; margin-left:10px;"
+                    onclick="closeConfirmModal()">No, Go Back</button>
+            </div>
+        </div>
     </div>
-</div>
 
-<!-- Firebase SDK -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, setDoc, deleteDoc, query, orderBy, arrayUnion, writeBatch, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-    import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    <!-- Modal for Booth Signup -->
+    <div id="signupModal" class="modal-overlay">
+        <div class="modal">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3>Sign Up to Help</h3>
+            <p id="modal-booth-details" style="font-weight:bold; color:var(--gs-blue);"></p>
+            <input type="hidden" id="modal-booth-id">
 
-    // --- GITHUB DEPLOYMENT CONFIGURATION ---
-    let firebaseConfig;
-    let usePreviewPaths = true; // Set to FALSE for GitHub deployment
-    let appId = 'default-app-id';
+            <label>Volunteer Name</label>
+            <input type="text" id="volunteerName" placeholder="Your Name">
 
-    if (typeof __firebase_config !== 'undefined') {
-        firebaseConfig = JSON.parse(__firebase_config);
-        appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-    } else {
-        // --- PUT YOUR GITHUB FIREBASE CONFIG HERE ---
-        firebaseConfig = {
-            apiKey: "AIzaSyBFQNSlnazgvBZG68epgT5s4QnGIZUsOqQ",
-            authDomain: "gs-cookies-club.firebaseapp.com",
-            projectId: "gs-cookies-club",
-            storageBucket: "gs-cookies-club.firebasestorage.app",
-            messagingSenderId: "445860623684",
-            appId: "1:445860623684:web:ab0957ae10b3a5a7a75311",
-            measurementId: "G-FJR7ZYMVGJ"
-        };
-        usePreviewPaths = false; 
-    }
+            <label>Contact Email (Required)</label>
+            <input type="text" id="volunteerContact" placeholder="email@example.com">
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
+            <label>I am signing up as:</label>
+            <div style="margin-bottom:20px; display:flex; gap:20px;">
+                <label style="font-weight:normal;"><input type="radio" name="role" value="Adult" checked> Adult</label>
+                <label style="font-weight:normal;"><input type="radio" name="role" value="Scout"> Scout</label>
+            </div>
 
-    function getCollectionPath(colName) {
-        if (usePreviewPaths) {
-            return collection(db, 'artifacts', appId, 'public', 'data', colName);
+            <button class="action-btn" onclick="confirmSignup()">Confirm Sign Up</button>
+        </div>
+    </div>
+
+    <!-- Generic Message Modal (Replaces Alert) -->
+    <div id="messageModal" class="modal-overlay">
+        <div class="modal" style="text-align:center;">
+            <span class="close-modal" onclick="closeMessageModal()">&times;</span>
+            <h3 id="msgTitle">Notification</h3>
+            <p id="msgBody"></p>
+            <button class="action-btn" onclick="closeMessageModal()">OK</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, setDoc, deleteDoc, query, orderBy, arrayUnion, writeBatch, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // --- GITHUB DEPLOYMENT CONFIGURATION ---
+        let firebaseConfig;
+        let usePreviewPaths = true; // Set to FALSE for GitHub deployment
+        let appId = 'default-app-id';
+
+        if (typeof __firebase_config !== 'undefined') {
+            firebaseConfig = JSON.parse(__firebase_config);
+            appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         } else {
-            return collection(db, colName); 
+            // --- PUT YOUR GITHUB FIREBASE CONFIG HERE ---
+            firebaseConfig = {
+                apiKey: "AIzaSyBFQNSlnazgvBZG68epgT5s4QnGIZUsOqQ",
+                authDomain: "gs-cookies-club.firebaseapp.com",
+                projectId: "gs-cookies-club",
+                storageBucket: "gs-cookies-club.firebasestorage.app",
+                messagingSenderId: "445860623684",
+                appId: "1:445860623684:web:ab0957ae10b3a5a7a75311",
+                measurementId: "G-FJR7ZYMVGJ"
+            };
+            usePreviewPaths = false;
         }
-    }
 
-    const initAuth = async () => {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-            await signInAnonymously(auth);
-        }
-    };
-    initAuth();
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
 
-    // --- GLOBAL DATA ---
-    const cookies = [
-        "Adventurefuls", "Toast-Yay!", "Lemonades", "Trefoils", 
-        "Thin Mints", "Peanut Butter Patties", "Caramel deLites", 
-        "Peanut Butter Sandwich", "Caramel Choc Chip (GF)"
-    ];
-    const BOX_PRICE = 6;
-    let currentUser = null;
-    let isAdminLoggedIn = false; 
-    let boothDataMap = {}; 
-    let currentOrders = [];
-    let currentStock = {}; 
-    let orderIdToCancel = null;
-
-    // --- 1. UI FUNCTIONS (Attached directly to Window for robustness) ---
-    
-    // --- LOGIN LOGIC ---
-    window.checkAdmin = () => {
-        if(isAdminLoggedIn) {
-             window.switchTab('admin-tab');
-             return;
-        }
-        document.getElementById('loginModal').style.display = 'flex';
-        document.getElementById('loginError').style.display = 'none';
-        document.getElementById('adminPassInput').value = '';
-        document.getElementById('adminPassInput').focus();
-    };
-
-    document.getElementById('adminPassInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            window.attemptLogin();
-        }
-    });
-
-    window.closeLoginModal = () => {
-        document.getElementById('loginModal').style.display = 'none';
-    };
-
-    window.attemptLogin = () => {
-        const pass = document.getElementById('adminPassInput').value;
-        if (pass === "CookieQueens") {
-            isAdminLoggedIn = true; 
-            const btn = document.querySelector('.tab-btn.admin-lock');
-            if(btn) btn.innerHTML = "🔓 Admin";
-            window.closeLoginModal();
-            window.switchTab('admin-tab');
-            initStockListener(); // Start listening to stock when admin logs in
-        } else {
-            document.getElementById('loginError').style.display = 'block';
-        }
-    };
-
-    // --- GENERAL MODAL LOGIC ---
-    window.showMessage = (title, body) => {
-        document.getElementById('msgTitle').innerText = title;
-        document.getElementById('msgBody').innerText = body;
-        document.getElementById('messageModal').style.display = 'flex';
-    };
-
-    window.closeMessageModal = () => {
-        document.getElementById('messageModal').style.display = 'none';
-    };
-
-    window.logoutAdmin = () => {
-        location.reload();
-    };
-
-    window.switchTab = (tabId) => {
-        if(tabId === 'admin-tab') {
-            if(!isAdminLoggedIn) {
-                window.checkAdmin();
-                return; 
+        function getCollectionPath(colName) {
+            if (usePreviewPaths) {
+                return collection(db, 'artifacts', appId, 'public', 'data', colName);
+            } else {
+                return collection(db, colName);
             }
         }
 
-        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        const initAuth = async () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
+        };
+        initAuth();
 
-        const target = document.getElementById(tabId);
-        if(target) target.classList.add('active');
-        
-        const btns = document.querySelectorAll('.tab-btn');
-        if(tabId === 'booth-tab') btns[0].classList.add('active');
-        if(tabId === 'order-tab') btns[1].classList.add('active');
-        if(tabId === 'admin-tab') btns[2].classList.add('active');
-    };
+        // --- GLOBAL DATA ---
+        const cookies = [
+            "Adventurefuls", "Toast-Yay!", "Lemonades", "Trefoils",
+            "Thin Mints", "Peanut Butter Patties", "Caramel deLites",
+            "Peanut Butter Sandwich", "Caramel Choc Chip (GF)"
+        ];
+        const CASE_PRICE = 72;
+        let currentUser = null;
+        let isAdminLoggedIn = false;
+        let boothDataMap = {};
+        let currentOrders = [];
+        let currentStock = {};
+        let orderIdToCancel = null;
 
-    window.switchAdminSub = (subId, btn) => {
-        document.querySelectorAll('.admin-sub-view').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.admin-sub-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById(subId).style.display = 'block';
-        if(btn) btn.classList.add('active');
-    };
+        // --- 1. UI FUNCTIONS (Attached directly to Window for robustness) ---
 
-    window.toggleInput = (index) => {
-        const qty = document.getElementById(`qty-${index}`);
-        const chk = document.getElementById(`chk-${index}`);
-        qty.disabled = !chk.checked;
-        if (!chk.checked) {
-            qty.value = '';
-            qty.style.background = '#f0f0f0';
-        } else {
-            qty.style.background = '#fff';
-            qty.focus();
-        }
-        window.calcTotal();
-    };
+        // --- LOGIN LOGIC ---
+        window.checkAdmin = () => {
+            if (isAdminLoggedIn) {
+                window.switchTab('admin-tab');
+                return;
+            }
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('adminPassInput').value = '';
+            document.getElementById('adminPassInput').focus();
+        };
 
-    window.calcTotal = () => {
-        let count = 0;
-        cookies.forEach((_, i) => {
-            const qty = document.getElementById(`qty-${i}`).value;
-            if (qty) count += parseInt(qty);
+        document.getElementById('adminPassInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                window.attemptLogin();
+            }
         });
-        document.getElementById('totalPrice').innerText = count * BOX_PRICE;
-    };
 
-    window.openSignup = (id, loc, time) => {
-        document.getElementById('signupModal').style.display = 'flex';
-        document.getElementById('modal-booth-details').innerText = `${loc}`;
-        document.getElementById('modal-booth-id').value = id;
-    };
+        window.closeLoginModal = () => {
+            document.getElementById('loginModal').style.display = 'none';
+        };
 
-    window.closeModal = () => {
-        document.getElementById('signupModal').style.display = 'none';
-    };
+        window.attemptLogin = () => {
+            const pass = document.getElementById('adminPassInput').value;
+            if (pass === "CookieQueens") {
+                isAdminLoggedIn = true;
+                const btn = document.querySelector('.tab-btn.admin-lock');
+                if (btn) btn.innerHTML = "🔓 Admin";
+                window.closeLoginModal();
+                window.switchTab('admin-tab');
+                initStockListener(); // Start listening to stock when admin logs in
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        };
+
+        // --- GENERAL MODAL LOGIC ---
+        window.showMessage = (title, body) => {
+            document.getElementById('msgTitle').innerText = title;
+            document.getElementById('msgBody').innerText = body;
+            document.getElementById('messageModal').style.display = 'flex';
+        };
+
+        window.closeMessageModal = () => {
+            document.getElementById('messageModal').style.display = 'none';
+        };
+
+        window.logoutAdmin = () => {
+            location.reload();
+        };
+
+        window.switchTab = (tabId) => {
+            if (tabId === 'admin-tab') {
+                if (!isAdminLoggedIn) {
+                    window.checkAdmin();
+                    return;
+                }
+            }
+
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+
+            const btns = document.querySelectorAll('.tab-btn');
+            if (tabId === 'booth-tab') btns[0].classList.add('active');
+            if (tabId === 'order-tab') btns[1].classList.add('active');
+            if (tabId === 'admin-tab') btns[2].classList.add('active');
+        };
+
+        window.switchAdminSub = (subId, btn) => {
+            document.querySelectorAll('.admin-sub-view').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.admin-sub-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(subId).style.display = 'block';
+            if (btn) btn.classList.add('active');
+        };
+
+        window.toggleInput = (index) => {
+            const qty = document.getElementById(`qty-${index}`);
+            const chk = document.getElementById(`chk-${index}`);
+            qty.disabled = !chk.checked;
+            if (!chk.checked) {
+                qty.value = '';
+                qty.style.background = '#f0f0f0';
+            } else {
+                qty.style.background = '#fff';
+                qty.focus();
+            }
+            window.calcTotal();
+        };
+
+        window.calcTotal = () => {
+            let count = 0;
+            cookies.forEach((_, i) => {
+                const qty = document.getElementById(`qty-${i}`).value;
+                if (qty) count += parseInt(qty);
+            });
+            document.getElementById('totalPrice').innerText = count * CASE_PRICE;
+            document.getElementById('totalCasesDisplay').innerText = count + " Cases";
+        };
+
+        window.openSignup = (id, loc, time) => {
+            document.getElementById('signupModal').style.display = 'flex';
+            document.getElementById('modal-booth-details').innerText = `${loc}`;
+            document.getElementById('modal-booth-id').value = id;
+        };
+
+        window.closeModal = () => {
+            document.getElementById('signupModal').style.display = 'none';
+        };
 
 
-    // --- 2. LOGIC INITIALIZATION ---
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUser = user;
-            console.log("Authenticated");
-            renderOrderForm();
-            listenToBooths();
-            listenToOrders();
-        }
-    });
+        // --- 2. LOGIC INITIALIZATION ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                console.log("Authenticated");
+                renderOrderForm();
+                listenToBooths();
+                listenToOrders();
+            }
+        });
 
-    // --- 3. DATA FUNCTIONS ---
-    function renderOrderForm() {
-        const container = document.getElementById('cookie-list');
-        container.innerHTML = cookies.map((cookie, index) => `
+        // --- 3. DATA FUNCTIONS ---
+        function renderOrderForm() {
+            const container = document.getElementById('cookie-list');
+            container.innerHTML = cookies.map((cookie, index) => `
             <div class="cookie-card">
                 <div class="cookie-header">
                     <span class="cookie-name">${cookie}</span>
@@ -745,390 +1156,400 @@
                 <input type="number" id="qty-${index}" placeholder="0" disabled min="0" oninput="window.calcTotal()" style="background:#f0f0f0;">
             </div>
         `).join('');
-    }
+        }
 
-    // --- STOCK MANAGEMENT ---
-    function initStockListener() {
-        const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
-        onSnapshot(docRef, (docSnap) => {
-            if (docSnap.exists()) {
-                currentStock = docSnap.data();
-            } else {
-                // Init if empty
-                currentStock = {};
-                cookies.forEach(c => currentStock[c] = 0);
-            }
-            renderStockTable();
-        });
-    }
+        // --- STOCK MANAGEMENT ---
+        function initStockListener() {
+            const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    currentStock = docSnap.data();
+                } else {
+                    // Init if empty
+                    currentStock = {};
+                    cookies.forEach(c => currentStock[c] = 0);
+                }
+                renderStockTable();
+            });
+        }
 
-    function renderStockTable() {
-        const container = document.getElementById('stock-display-container');
-        if (!container) return;
-        
-        let html = "";
-        cookies.forEach((c) => {
-            let val = currentStock[c] || 0;
-            let cases = Math.floor(val / 12);
-            let leftover = val % 12;
-            let caseStr = cases > 0 ? `(${cases} cases${leftover > 0 ? `, ${leftover} boxes` : ''})` : '';
-            
-            html += `
+        function renderStockTable() {
+            const container = document.getElementById('stock-display-container');
+            if (!container) return;
+
+            let html = "";
+            cookies.forEach((c) => {
+                let val = currentStock[c] || 0;
+                html += `
                 <div class="stock-list-row">
                     <span class="stock-list-name">${c}</span>
-                    <span class="stock-list-counts"><strong>${val}</strong> boxes ${caseStr}</span>
+                    <span class="stock-list-counts"><strong>${val}</strong> cases</span>
                 </div>
             `;
-        });
-        container.innerHTML = html;
-    }
+            });
+            container.innerHTML = html;
+        }
 
-    window.openStockModal = () => {
-        const container = document.getElementById('stock-modal-inputs');
-        let html = "";
-        cookies.forEach((c, i) => {
-            let val = currentStock[c] || 0;
-            html += `
+        window.openStockModal = () => {
+            const container = document.getElementById('stock-modal-inputs');
+            let html = "";
+            cookies.forEach((c, i) => {
+                let val = currentStock[c] || 0;
+                html += `
                 <div class="stock-input-row">
                     <label style="margin:0;">${c}</label>
                     <input type="number" id="modal-stock-${i}" class="stock-modal-input" value="${val}" min="0">
                 </div>
             `;
-        });
-        container.innerHTML = html;
-        document.getElementById('stockModal').style.display = 'flex';
-    };
+            });
+            container.innerHTML = html;
+            document.getElementById('stockModal').style.display = 'flex';
+        };
 
-    window.closeStockModal = () => {
-        document.getElementById('stockModal').style.display = 'none';
-    };
+        window.closeStockModal = () => {
+            document.getElementById('stockModal').style.display = 'none';
+        };
 
-    window.saveStockCounts = async () => {
-        let newStock = {};
-        cookies.forEach((c, i) => {
-            const val = document.getElementById(`modal-stock-${i}`).value;
-            newStock[c] = parseInt(val) || 0;
-        });
+        window.saveStockCounts = async () => {
+            let newStock = {};
+            cookies.forEach((c, i) => {
+                const val = document.getElementById(`modal-stock-${i}`).value;
+                newStock[c] = parseInt(val) || 0;
+            });
 
-        const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
-        try {
-            await setDoc(docRef, newStock);
-            window.closeStockModal();
-            window.showMessage("Success", "Stock counts updated!");
-            // After stock update, run check to fulfill pending orders
-            window.autoFulfillOrders(newStock);
-        } catch(e) {
-            console.error(e);
-            window.showMessage("Error", "Could not save stock.");
-        }
-    };
-
-    window.autoFulfillOrders = async (stockData) => {
-        const batch = writeBatch(db);
-        let updatedCount = 0;
-        let tempStock = { ...stockData }; // Working copy
-
-        // Sort orders oldest first to fulfill FCFS
-        let sortedOrders = [...currentOrders].sort((a,b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
-
-        sortedOrders.forEach(order => {
-            // Skip picked up orders
-            if (order.statusPickup === 'Picked Up') return;
-
-            let currentMap = order.supplyStatus || {};
-            // Init legacy map
-            if(Object.keys(currentMap).length === 0 && order.items) {
-                Object.keys(order.items).forEach(k => currentMap[k] = order.statusStock);
+            const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
+            try {
+                await setDoc(docRef, newStock);
+                window.closeStockModal();
+                window.showMessage("Success", "Stock counts updated!");
+                // After stock update, run check to fulfill pending orders
+                window.autoFulfillOrders(newStock);
+            } catch (e) {
+                console.error(e);
+                window.showMessage("Error", "Could not save stock.");
             }
+        };
 
-            let orderChanged = false;
-            let newMap = { ...currentMap };
+        window.autoFulfillOrders = async (stockData) => {
+            const batch = writeBatch(db);
+            let updatedCount = 0;
+            let tempStock = { ...stockData }; // Working copy
 
-            // Check each item in order
-            Object.keys(order.items).forEach(cookie => {
-                let needed = order.items[cookie];
-                let status = newMap[cookie];
+            // Sort orders oldest first to fulfill FCFS
+            let sortedOrders = [...currentOrders].sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
 
-                // If not In Stock, try to fill from cupboard
-                if (status !== 'In Stock') {
-                    if (tempStock[cookie] >= needed) {
-                        tempStock[cookie] -= needed; // Deduct from working stock
-                        newMap[cookie] = 'In Stock';
-                        orderChanged = true;
+            sortedOrders.forEach(order => {
+                // Skip picked up orders
+                if (order.statusPickup === 'Picked Up') return;
+
+                let currentMap = order.supplyStatus || {};
+                // Init legacy map
+                if (Object.keys(currentMap).length === 0 && order.items) {
+                    Object.keys(order.items).forEach(k => currentMap[k] = order.statusStock);
+                }
+
+                let orderChanged = false;
+                let newMap = { ...currentMap };
+
+                // Check each item in order
+                Object.keys(order.items).forEach(cookie => {
+                    let needed = order.items[cookie];
+                    let status = newMap[cookie];
+
+                    // If not In Stock, try to fill from cupboard
+                    if (status !== 'In Stock') {
+                        if (tempStock[cookie] >= needed) {
+                            tempStock[cookie] -= needed; // Deduct from working stock
+                            newMap[cookie] = 'In Stock';
+                            orderChanged = true;
+                        }
+                    }
+                });
+
+                if (orderChanged) {
+                    // Recalculate Overall Status
+                    let allInStock = true;
+                    let anyNeeds = false;
+                    let allOrdered = true;
+
+                    Object.values(newMap).forEach(s => {
+                        if (s !== "In Stock") allInStock = false;
+                        if (s === "Needs Ordering") anyNeeds = true;
+                        if (s !== "Ordered" && s !== "In Stock") allOrdered = false;
+                    });
+
+                    let newOverallStatus = "Needs Ordering";
+                    if (!anyNeeds && allOrdered) newOverallStatus = "Ordered";
+                    if (allInStock) newOverallStatus = "In Stock";
+
+                    const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", order.id);
+                    batch.update(ref, {
+                        supplyStatus: newMap,
+                        statusStock: newOverallStatus
+                    });
+                    updatedCount++;
+                }
+            });
+
+            if (updatedCount > 0) {
+                await batch.commit();
+                // Update the cupboard stock with final values
+                const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
+                await setDoc(docRef, tempStock);
+                window.showMessage("Auto-Fulfill", `Allocated stock to ${updatedCount} orders.`);
+            }
+        };
+
+
+        window.submitOrder = async () => {
+            if (!currentUser) return window.showMessage("System", "System connecting... please wait.");
+
+            const btn = document.getElementById('submitBtn');
+            const customerInput = document.getElementById('custName');
+            const scoutInput = document.getElementById('gsName');
+            const contactInput = document.getElementById('contactNum');
+            const emailInput = document.getElementById('email');
+
+            const customer = customerInput.value;
+            const scout = scoutInput.value;
+            const contact = contactInput.value;
+            const email = emailInput.value;
+
+            if (!customer || !scout || !contact || !email) return window.showMessage("Missing Info", "All contact fields are required.");
+            if (!customer.includes(' ') || !scout.includes(' ')) return window.showMessage("Full Name Required", "Please enter both First and Last names.");
+
+            let orderItems = {};
+            let totalCases = 0;
+            let summaryText = "";
+            let supplyStatusMap = {};
+
+            // Check if we can fulfill immediately from stock
+            let tempStock = { ...currentStock };
+            let canFulfill = true;
+
+            cookies.forEach((cookie, i) => {
+                const qty = document.getElementById(`qty-${i}`).value;
+                if (qty && parseInt(qty) > 0) {
+                    let count = parseInt(qty);
+                    orderItems[cookie] = count;
+                    totalCases += count;
+                    summaryText += `${count}x ${cookie}, `;
+
+                    // Logic: If in stock, mark In Stock immediately and reserve
+                    if (tempStock[cookie] >= count) {
+                        tempStock[cookie] -= count;
+                        supplyStatusMap[cookie] = "In Stock";
+                    } else {
+                        supplyStatusMap[cookie] = "Needs Ordering";
+                        canFulfill = false;
                     }
                 }
             });
 
-            if (orderChanged) {
-                // Recalculate Overall Status
-                let allInStock = true;
-                let anyNeeds = false;
-                let allOrdered = true;
-                
-                Object.values(newMap).forEach(s => {
-                    if(s !== "In Stock") allInStock = false;
-                    if(s === "Needs Ordering") anyNeeds = true;
-                    if(s !== "Ordered" && s !== "In Stock") allOrdered = false;
-                });
+            if (totalCases === 0) return window.showMessage("Missing Info", "Please select at least one case of cookies.");
 
-                let newOverallStatus = "Needs Ordering";
-                if(!anyNeeds && allOrdered) newOverallStatus = "Ordered";
-                if(allInStock) newOverallStatus = "In Stock";
-
-                const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", order.id);
-                batch.update(ref, { 
-                    supplyStatus: newMap,
-                    statusStock: newOverallStatus
-                });
-                updatedCount++;
+            // DISABLE BUTTON HERE
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = "Processing...";
             }
-        });
 
-        if (updatedCount > 0) {
-            await batch.commit();
-            // Update the cupboard stock with final values
-            const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
-            await setDoc(docRef, tempStock);
-            window.showMessage("Auto-Fulfill", `Allocated stock to ${updatedCount} orders.`);
-        }
-    };
+            const totalCost = totalCases * CASE_PRICE;
+            let initialStatus = canFulfill ? "In Stock" : "Needs Ordering";
 
+            const orderData = {
+                customer, scout, contact, email,
+                items: orderItems,
+                totalCases: totalCases,
+                totalCost: totalCost,
+                statusStock: initialStatus,
+                supplyStatus: supplyStatusMap,
+                supplyDates: {},
+                statusPaid: "Unpaid",
+                statusPickup: "Pending",
+                timestamp: new Date()
+            };
 
-    window.submitOrder = async () => {
-        if (!currentUser) return window.showMessage("System", "System connecting... please wait.");
-        
-        const btn = document.getElementById('submitBtn');
-        const customerInput = document.getElementById('custName');
-        const scoutInput = document.getElementById('gsName');
-        const contactInput = document.getElementById('contactNum');
-        const emailInput = document.getElementById('email');
+            try {
+                await addDoc(getCollectionPath('orders'), orderData);
 
-        const customer = customerInput.value;
-        const scout = scoutInput.value;
-        const contact = contactInput.value;
-        const email = emailInput.value;
+                // If we reserved stock, update the DB
+                if (JSON.stringify(tempStock) !== JSON.stringify(currentStock)) {
+                    const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
+                    await setDoc(docRef, tempStock);
+                }
 
-        if(!customer || !scout || !contact || !email) return window.showMessage("Missing Info", "All contact fields are required.");
-        if(!customer.includes(' ') || !scout.includes(' ')) return window.showMessage("Full Name Required", "Please enter both First and Last names.");
+                window.showMessage("Thank You!", "Thank you for your order. Your troop leader will be in contact with more info soon.");
 
-        let orderItems = {};
-        let totalBoxes = 0;
-        let summaryText = "";
-        let supplyStatusMap = {};
+                // RESET FORM
+                document.getElementById('orderForm').reset();
+                renderOrderForm(); // Clears cookies
+                document.getElementById('totalPrice').innerText = "0";
 
-        // Check if we can fulfill immediately from stock
-        let tempStock = { ...currentStock };
-        let canFulfill = true;
+                // Explicitly clear inputs just in case
+                customerInput.value = "";
+                scoutInput.value = "";
+                contactInput.value = "";
+                emailInput.value = "";
 
-        cookies.forEach((cookie, i) => {
-            const qty = document.getElementById(`qty-${i}`).value;
-            if (qty && parseInt(qty) > 0) {
-                let count = parseInt(qty);
-                orderItems[cookie] = count;
-                totalBoxes += count;
-                summaryText += `${count}x ${cookie}, `;
-                
-                // Logic: If in stock, mark In Stock immediately and reserve
-                if (tempStock[cookie] >= count) {
-                    tempStock[cookie] -= count;
-                    supplyStatusMap[cookie] = "In Stock";
-                } else {
-                    supplyStatusMap[cookie] = "Needs Ordering";
-                    canFulfill = false; 
+            } catch (e) {
+                console.error(e);
+                window.showMessage("Error", "Error submitting order. Please try again.");
+            } finally {
+                // RE-ENABLE BUTTON
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Submit Order";
                 }
             }
-        });
-
-        if(totalBoxes === 0) return window.showMessage("Missing Info", "Please select at least one box of cookies.");
-
-        // DISABLE BUTTON HERE
-        if(btn) {
-            btn.disabled = true;
-            btn.innerText = "Processing...";
-        }
-
-        const totalCost = totalBoxes * BOX_PRICE;
-        let initialStatus = canFulfill ? "In Stock" : "Needs Ordering";
-
-        const orderData = {
-            customer, scout, contact, email,
-            items: orderItems,
-            totalBoxes: totalBoxes,
-            totalCost: totalCost,
-            statusStock: initialStatus,
-            supplyStatus: supplyStatusMap,
-            supplyDates: {},
-            statusPaid: "Unpaid",
-            statusPickup: "Pending",
-            timestamp: new Date()
         };
 
-        try {
-            await addDoc(getCollectionPath('orders'), orderData);
-            
-            // If we reserved stock, update the DB
-            if (JSON.stringify(tempStock) !== JSON.stringify(currentStock)) {
-                const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
-                await setDoc(docRef, tempStock);
-            }
+        function listenToBooths() {
+            const q = getCollectionPath('booths');
+            onSnapshot(q, (snapshot) => {
+                const container = document.getElementById('booths-container');
+                const adminList = document.getElementById('admin-booth-list');
+                document.getElementById('booths-loader').style.display = 'none';
 
-            window.showMessage("Thank You!", "Thank you for your order. Your troop leader will be in contact with more info soon.");
-            
-            // RESET FORM
-            document.getElementById('orderForm').reset();
-            renderOrderForm(); // Clears cookies
-            document.getElementById('totalPrice').innerText = "0";
-            
-            // Explicitly clear inputs just in case
-            customerInput.value = "";
-            scoutInput.value = "";
-            contactInput.value = "";
-            emailInput.value = "";
+                let booths = [];
+                boothDataMap = {};
 
-        } catch (e) {
-            console.error(e);
-            window.showMessage("Error", "Error submitting order. Please try again.");
-        } finally {
-            // RE-ENABLE BUTTON
-            if(btn) {
-                btn.disabled = false;
-                btn.innerText = "Submit Order";
-            }
-        }
-    };
+                snapshot.forEach(doc => {
+                    const b = { id: doc.id, ...doc.data() };
+                    booths.push(b);
+                    boothDataMap[doc.id] = b;
+                });
+                booths.sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
 
-    function listenToBooths() {
-        const q = getCollectionPath('booths');
-        onSnapshot(q, (snapshot) => {
-            const container = document.getElementById('booths-container');
-            const adminList = document.getElementById('admin-booth-list');
-            document.getElementById('booths-loader').style.display = 'none';
-            
-            let booths = [];
-            boothDataMap = {}; 
+                let html = "";
+                let adminHtml = "";
 
-            snapshot.forEach(doc => {
-                const b = {id: doc.id, ...doc.data()};
-                booths.push(b);
-                boothDataMap[doc.id] = b; 
-            });
-            booths.sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
+                if (booths.length === 0) html = "<p>No booths scheduled yet. Check back soon!</p>";
 
-            let html = "";
-            let adminHtml = "";
+                booths.forEach((b) => {
+                    const volunteers = b.volunteers || [];
+                    const neededAdults = parseInt(b.neededAdults) || 1;
+                    const neededScouts = parseInt(b.neededScouts) || 2;
 
-            if (booths.length === 0) html = "<p>No booths scheduled yet. Check back soon!</p>";
+                    const currentAdults = volunteers.filter(v => v.role === 'Adult').length;
+                    const currentScouts = volunteers.filter(v => v.role === 'Scout').length;
 
-            booths.forEach((b) => {
-                const volunteers = b.volunteers || [];
-                const neededCount = parseInt(b.needed) || 2;
-                const remaining = neededCount - volunteers.length;
-                
-                let statusHtml = remaining <= 0 
-                    ? `<span class="shift-status status-full">✅ Shift Full</span>`
-                    : `<span class="shift-status status-needed">⚠️ ${remaining} more needed</span>`;
-                
-                let btnHtml = remaining > 0 
-                    ? `<button class="signup-btn" onclick="window.openSignup('${b.id}', '${b.location}', '${formatDate(b.date)} ${b.start}')">Sign Up</button>`
-                    : ``;
+                    const remainingAdults = neededAdults - currentAdults;
+                    const remainingScouts = neededScouts - currentScouts;
 
-                html += `
+                    let statusHtml = "";
+                    if (remainingAdults <= 0 && remainingScouts <= 0) {
+                        statusHtml = `<span class="shift-status status-full">✅ Shift Full</span>`;
+                    } else {
+                        let parts = [];
+                        if (remainingAdults > 0) parts.push(`${remainingAdults} Adult${remainingAdults > 1 ? 's' : ''}`);
+                        if (remainingScouts > 0) parts.push(`${remainingScouts} Scout${remainingScouts > 1 ? 's' : ''}`);
+                        statusHtml = `<span class="shift-status status-needed">⚠️ Need ${parts.join(', ')}</span>`;
+                    }
+
+                    let btnHtml = (remainingAdults > 0 || remainingScouts > 0)
+                        ? `<button class="signup-btn" onclick="window.openSignup('${b.id}', '${b.location}', '${formatDate(b.date)} ${b.start}')">Sign Up</button>`
+                        : ``;
+
+                    html += `
                     <div class="booth-card">
                         <div class="booth-meta">${b.location}</div>
                         ${b.address ? `<div class="booth-address">${b.address}</div>` : ''}
                         <div class="booth-date">${formatDate(b.date)}</div>
                         <div class="shift-row">
                             <span class="shift-time">🕒 ${formatTime(b.start)} - ${formatTime(b.end)}</span>
-                            ${statusHtml}
+                            <div style="text-align:right;">
+                                ${statusHtml}
+                            </div>
                             ${btnHtml}
                         </div>
                         ${volunteers.length > 0 ? `<div style="font-size:0.85rem; margin-top:8px; color:#666;"><strong>Helping:</strong> ${volunteers.map(v => v.name).join(', ')}</div>` : ''}
                     </div>
                 `;
 
-                adminHtml += `
+                    adminHtml += `
                     <div style="background:white; border:1px solid #ddd; padding:10px; margin-bottom:5px; border-radius:4px; display:flex; justify-content:space-between; align-items:center;">
                         <div>
                             <strong>${b.location}</strong> (${b.date})<br>
                             <span style="font-size:0.85rem">${b.address || ''}</span><br>
-                            ${b.start} - ${b.end} | Target: ${b.needed}
+                            ${b.start} - ${b.end} | Target: ${b.neededAdults || 0} A, ${b.neededScouts || 0} S
                         </div>
                         <div style="text-align:right;">
-                            <div style="margin-bottom:5px;">Filled: ${volunteers.length}/${b.needed}</div>
+                            <div style="margin-bottom:5px;">Filled: ${volunteers.filter(v => v.role === 'Adult').length} A, ${volunteers.filter(v => v.role === 'Scout').length} S</div>
                             <button onclick="window.editBooth('${b.id}')" style="cursor:pointer; padding:4px 8px; background:var(--gs-blue); color:white; border:none; border-radius:4px; font-size:0.8rem;">Edit</button>
                             <button onclick="window.deleteBooth('${b.id}')" style="cursor:pointer; padding:4px 8px; background:#d9534f; color:white; border:none; border-radius:4px; font-size:0.8rem; margin-left:5px;">Delete</button>
                         </div>
                     </div>
                 `;
+                });
+                container.innerHTML = html;
+                adminList.innerHTML = adminHtml;
             });
-            container.innerHTML = html;
-            adminList.innerHTML = adminHtml;
-        });
-    }
+        }
 
-    // --- MAIN ADMIN DATA LOGIC ---
-    function listenToOrders() {
-        const q = getCollectionPath('orders');
-        
-        onSnapshot(q, (snapshot) => {
-            currentOrders = []; // Reset global cache
-            
-            const tableNewOrders = document.querySelector('#table-new-orders tbody');
-            const tablePendingFulfillment = document.querySelector('#table-pending-fulfillment tbody');
-            const tableOrderReady = document.querySelector('#table-order-ready tbody');
-            
-            const tableUnpaid = document.querySelector('#table-unpaid tbody');
-            const tablePaid = document.querySelector('#table-paid tbody');
-            
-            const tableSupplyNeeds = document.querySelector('#table-supply-needs tbody');
-            const tableSupplyOrdered = document.querySelector('#table-supply-ordered tbody');
-            
-            let orders = [];
-            snapshot.forEach(doc => {
-                const d = {id: doc.id, ...doc.data()};
-                orders.push(d);
-                currentOrders.push(d);
-            });
-            
-            orders.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+        // --- MAIN ADMIN DATA LOGIC ---
+        function listenToOrders() {
+            const q = getCollectionPath('orders');
 
-            let htmlNewOrders = "", htmlPendingFulfillment = "", htmlOrderReady = "", htmlUnpaid = "", htmlPaid = "";
-            let totalOutstanding = 0, totalCollected = 0;
+            onSnapshot(q, (snapshot) => {
+                currentOrders = []; // Reset global cache
 
-            // Aggregation for Supply Tab
-            let supplyNeeds = {};
-            let supplyOrdered = {};
+                const tableNewOrders = document.querySelector('#table-new-orders tbody');
+                const tablePendingFulfillment = document.querySelector('#table-pending-fulfillment tbody');
+                const tableOrderReady = document.querySelector('#table-order-ready tbody');
 
-            orders.forEach((d) => {
-                let summary = Object.entries(d.items).map(([k, v]) => `<div style='font-size:0.8rem'>${v}x ${k}</div>`).join('');
-                let dateStr = d.timestamp ? new Date(d.timestamp.seconds * 1000).toLocaleDateString() : '';
+                const tableUnpaid = document.querySelector('#table-unpaid tbody');
+                const tablePaid = document.querySelector('#table-paid tbody');
 
-                // --- SUPPLY AGGREGATION ---
-                let itemStatusMap = d.supplyStatus || {};
-                let itemDateMap = d.supplyDates || {};
-                
-                // If map doesn't exist (legacy), init from main status
-                if(Object.keys(itemStatusMap).length === 0 && d.items) {
-                    Object.keys(d.items).forEach(k => itemStatusMap[k] = d.statusStock);
-                }
+                const tableSupplyNeeds = document.querySelector('#table-supply-needs tbody');
+                const tableSupplyOrdered = document.querySelector('#table-supply-ordered tbody');
 
-                Object.entries(d.items).forEach(([type, count]) => {
-                    let status = itemStatusMap[type];
-                    
-                    if (status === "Needs Ordering") {
-                        supplyNeeds[type] = (supplyNeeds[type] || 0) + count;
-                    } else if (status === "Ordered") {
-                        if (!supplyOrdered[type]) supplyOrdered[type] = { count: 0, date: itemDateMap[type] || "Unknown" };
-                        supplyOrdered[type].count += count;
-                        if(itemDateMap[type]) supplyOrdered[type].date = itemDateMap[type];
-                    }
+                let orders = [];
+                snapshot.forEach(doc => {
+                    const d = { id: doc.id, ...doc.data() };
+                    orders.push(d);
+                    currentOrders.push(d);
                 });
 
-                // --- ORDERS TAB (Strictly driven by inventory status) ---
-                
-                // 1. New Orders: statusStock == Needs Ordering AND not yet picked up
-                if (d.statusStock === "Needs Ordering" && d.statusPickup !== "Picked Up") {
-                    htmlNewOrders += `
+                orders.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+                let htmlNewOrders = "", htmlPendingFulfillment = "", htmlOrderReady = "", htmlUnpaid = "", htmlPaid = "";
+                let totalOutstanding = 0, totalCollected = 0;
+
+                // Aggregation for Supply Tab
+                let supplyNeeds = {};
+                let supplyOrdered = {};
+
+                orders.forEach((d) => {
+                    let summary = Object.entries(d.items).map(([k, v]) => `<div style='font-size:0.8rem'>${v}x ${k}</div>`).join('');
+                    let dateStr = d.timestamp ? new Date(d.timestamp.seconds * 1000).toLocaleDateString() : '';
+
+                    // --- SUPPLY AGGREGATION ---
+                    let itemStatusMap = d.supplyStatus || {};
+                    let itemDateMap = d.supplyDates || {};
+
+                    // If map doesn't exist (legacy), init from main status
+                    if (Object.keys(itemStatusMap).length === 0 && d.items) {
+                        Object.keys(d.items).forEach(k => itemStatusMap[k] = d.statusStock);
+                    }
+
+                    Object.entries(d.items).forEach(([type, count]) => {
+                        let status = itemStatusMap[type];
+
+                        if (status === "Needs Ordering") {
+                            supplyNeeds[type] = (supplyNeeds[type] || 0) + count;
+                        } else if (status === "Ordered") {
+                            if (!supplyOrdered[type]) supplyOrdered[type] = { count: 0, date: itemDateMap[type] || "Unknown" };
+                            supplyOrdered[type].count += count;
+                            if (itemDateMap[type]) supplyOrdered[type].date = itemDateMap[type];
+                        }
+                    });
+
+                    // --- ORDERS TAB (Strictly driven by inventory status) ---
+
+                    // 1. New Orders: statusStock == Needs Ordering AND not yet picked up
+                    if (d.statusStock === "Needs Ordering" && d.statusPickup !== "Picked Up") {
+                        htmlNewOrders += `
                         <tr>
                             <td>${dateStr}</td>
                             <td><strong>${d.customer}</strong><br><small>Troop: ${d.scout}</small></td>
@@ -1139,11 +1560,11 @@
                             </td>
                         </tr>
                     `;
-                }
-                
-                // 2. Pending Fulfillment: statusStock == Ordered (and not picked up)
-                else if (d.statusStock === "Ordered" && d.statusPickup !== "Picked Up") {
-                     htmlPendingFulfillment += `
+                    }
+
+                    // 2. Pending Fulfillment: statusStock == Ordered (and not picked up)
+                    else if (d.statusStock === "Ordered" && d.statusPickup !== "Picked Up") {
+                        htmlPendingFulfillment += `
                         <tr>
                             <td>${dateStr}</td>
                             <td><strong>${d.customer}</strong></td>
@@ -1154,11 +1575,11 @@
                             </td>
                         </tr>
                     `;
-                }
+                    }
 
-                // 3. Order Ready: statusStock == In Stock (and not picked up)
-                else if (d.statusStock === "In Stock" && d.statusPickup !== "Picked Up") {
-                    htmlOrderReady += `
+                    // 3. Order Ready: statusStock == In Stock (and not picked up)
+                    else if (d.statusStock === "In Stock" && d.statusPickup !== "Picked Up") {
+                        htmlOrderReady += `
                         <tr>
                             <td>${dateStr}</td>
                             <td>${d.customer}</td>
@@ -1169,297 +1590,302 @@
                             </td>
                         </tr>
                     `;
-                }
+                    }
 
-                // --- ACCOUNTING TAB ---
-                if (d.statusPaid === "Unpaid") {
-                    totalOutstanding += d.totalCost;
-                    htmlUnpaid += `<tr><td><strong>${d.customer}</strong><br><small>${d.scout}</small></td><td>$${d.totalCost}</td><td><span class="status-badge badge-red" onclick="window.cycleStatus('${d.id}', 'statusPaid', '${d.statusPaid}')">Unpaid</span></td><td>${d.statusPickup}</td></tr>`;
-                } 
-                else if (d.statusPaid === "Paid") {
-                    totalCollected += d.totalCost;
-                    htmlPaid += `<tr><td><strong>${d.customer}</strong><br><small>${d.scout}</small></td><td>$${d.totalCost}</td><td><span class="status-badge badge-green" onclick="window.cycleStatus('${d.id}', 'statusPaid', '${d.statusPaid}')">Paid</span></td><td>${d.statusPickup}</td></tr>`;
-                }
-            });
+                    // --- ACCOUNTING TAB ---
+                    if (d.statusPaid === "Unpaid") {
+                        totalOutstanding += d.totalCost;
+                        htmlUnpaid += `<tr><td><strong>${d.customer}</strong><br><small>${d.scout}</small></td><td>$${d.totalCost}</td><td><span class="status-badge badge-red" onclick="window.cycleStatus('${d.id}', 'statusPaid', '${d.statusPaid}')">Unpaid</span></td><td>${d.statusPickup}</td></tr>`;
+                    }
+                    else if (d.statusPaid === "Paid") {
+                        totalCollected += d.totalCost;
+                        htmlPaid += `<tr><td><strong>${d.customer}</strong><br><small>${d.scout}</small></td><td>$${d.totalCost}</td><td><span class="status-badge badge-green" onclick="window.cycleStatus('${d.id}', 'statusPaid', '${d.statusPaid}')">Paid</span></td><td>${d.statusPickup}</td></tr>`;
+                    }
+                });
 
-            // Render Orders Tab
-            tableNewOrders.innerHTML = htmlNewOrders || '<tr><td colspan="4" style="text-align:center;color:#999;">No new orders needing inventory action</td></tr>';
-            tablePendingFulfillment.innerHTML = htmlPendingFulfillment || '<tr><td colspan="4" style="text-align:center;color:#999;">No pending orders</td></tr>';
-            tableOrderReady.innerHTML = htmlOrderReady || '<tr><td colspan="4" style="text-align:center;color:#999;">No orders ready for pickup</td></tr>';
-            
-            // Render Accounting
-            tableUnpaid.innerHTML = htmlUnpaid || '<tr><td colspan="4" style="text-align:center;color:#999;">No outstanding balances</td></tr>';
-            tablePaid.innerHTML = htmlPaid || '<tr><td colspan="4" style="text-align:center;color:#999;">No paid orders yet</td></tr>';
-            document.getElementById('total-outstanding').innerText = "$" + totalOutstanding.toFixed(2);
-            document.getElementById('total-collected').innerText = "$" + totalCollected.toFixed(2);
+                // Render Orders Tab
+                tableNewOrders.innerHTML = htmlNewOrders || '<tr><td colspan="4" style="text-align:center;color:#999;">No new orders needing inventory action</td></tr>';
+                tablePendingFulfillment.innerHTML = htmlPendingFulfillment || '<tr><td colspan="4" style="text-align:center;color:#999;">No pending orders</td></tr>';
+                tableOrderReady.innerHTML = htmlOrderReady || '<tr><td colspan="4" style="text-align:center;color:#999;">No orders ready for pickup</td></tr>';
 
-            // Render Inventory Tab - Needs
-            let htmlSupplyNeeds = "";
-            Object.entries(supplyNeeds).forEach(([type, count]) => {
-                let cases = Math.ceil(count / 12);
-                htmlSupplyNeeds += `
+                // Render Accounting
+                tableUnpaid.innerHTML = htmlUnpaid || '<tr><td colspan="4" style="text-align:center;color:#999;">No outstanding balances</td></tr>';
+                tablePaid.innerHTML = htmlPaid || '<tr><td colspan="4" style="text-align:center;color:#999;">No paid orders yet</td></tr>';
+                document.getElementById('total-outstanding').innerText = "$" + totalOutstanding.toFixed(2);
+                document.getElementById('total-collected').innerText = "$" + totalCollected.toFixed(2);
+
+                // Render Inventory Tab - Needs
+                let htmlSupplyNeeds = "";
+                Object.entries(supplyNeeds).forEach(([type, count]) => {
+                    htmlSupplyNeeds += `
                     <tr>
                         <td><strong>${type}</strong></td>
-                        <td>${count} boxes</td>
-                        <td>${cases} cases</td>
+                        <td>${count} cases</td>
                         <td><button class="supply-btn" onclick="window.markBulkStatus('${type}', 'Needs Ordering', 'Ordered')">Mark Ordered</button></td>
                     </tr>
                 `;
-            });
-            tableSupplyNeeds.innerHTML = htmlSupplyNeeds || '<tr><td colspan="4" style="text-align:center;color:#999;">No cookies need ordering</td></tr>';
+                });
+                tableSupplyNeeds.innerHTML = htmlSupplyNeeds || '<tr><td colspan="4" style="text-align:center;color:#999;">No cookies need ordering</td></tr>';
 
-            // Render Inventory Tab - Ordered
-            let htmlSupplyOrdered = "";
-            Object.entries(supplyOrdered).forEach(([type, data]) => {
-                let cases = Math.ceil(data.count / 12);
-                htmlSupplyOrdered += `
+                // Render Inventory Tab - Ordered
+                let htmlSupplyOrdered = "";
+                Object.entries(supplyOrdered).forEach(([type, data]) => {
+                    htmlSupplyOrdered += `
                     <tr>
                         <td><strong>${type}</strong></td>
                         <td>${data.date}</td>
-                        <td>${data.count} boxes</td>
-                        <td>${cases} cases</td>
+                        <td>${data.count} cases</td>
                         <td><button class="supply-btn" style="background:var(--gs-green)" onclick="window.markBulkStatus('${type}', 'Ordered', 'In Stock')">Receipt (In Stock)</button></td>
                     </tr>
                 `;
-            });
-            tableSupplyOrdered.innerHTML = htmlSupplyOrdered || '<tr><td colspan="5" style="text-align:center;color:#999;">No pending shipments</td></tr>';
-        });
-    }
-
-    window.cancelOrder = (id) => {
-        orderIdToCancel = id;
-        document.getElementById('confirmModal').style.display = 'flex';
-    };
-
-    window.closeConfirmModal = () => {
-        document.getElementById('confirmModal').style.display = 'none';
-        orderIdToCancel = null;
-    };
-
-    window.proceedWithCancel = async () => {
-        if (!orderIdToCancel) return;
-        
-        try {
-            const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", orderIdToCancel);
-            await deleteDoc(ref);
-            window.closeConfirmModal();
-            window.showMessage("Order Cancelled", "The order has been removed.");
-        } catch (e) {
-            console.error(e);
-            window.showMessage("Error", "Failed to cancel order.");
-        }
-    };
-
-    // --- BULK UPDATE LOGIC ---
-    window.markBulkStatus = async (cookieType, oldStatus, newStatus) => {
-        // Automatically use today's date - NO CONFIRMATION DIALOG
-        let orderDate = new Date().toLocaleDateString('en-US');
-        
-        const batch = writeBatch(db);
-        let count = 0;
-
-        currentOrders.forEach(order => {
-            // Only update orders that haven't been picked up yet
-            if (order.statusPickup === 'Picked Up') return;
-
-            let currentMap = order.supplyStatus || {};
-            let currentDateMap = order.supplyDates || {};
-            let missingSupplyField = !order.supplyStatus; 
-            
-            // Legacy data fallback
-            if(Object.keys(currentMap).length === 0 && order.items) {
-                Object.keys(order.items).forEach(k => currentMap[k] = order.statusStock);
-            }
-
-            // Check if this specific cookie matches status
-            if (currentMap[cookieType] === oldStatus && order.items[cookieType] > 0) {
-                // Update local map first to calc new overall status
-                currentMap[cookieType] = newStatus;
-                
-                if(newStatus === 'Ordered') {
-                    currentDateMap[cookieType] = orderDate;
-                }
-
-                // Calculate new overall status STOCK
-                let allInStock = true;
-                let anyNeeds = false;
-                let allOrdered = true;
-                
-                Object.entries(currentMap).forEach(([k, s]) => {
-                    if(order.items[k] > 0) {
-                        if(s !== "In Stock") allInStock = false;
-                        if(s === "Needs Ordering") anyNeeds = true;
-                        if(s !== "Ordered" && s !== "In Stock") allOrdered = false;
-                    }
                 });
+                tableSupplyOrdered.innerHTML = htmlSupplyOrdered || '<tr><td colspan="5" style="text-align:center;color:#999;">No pending shipments</td></tr>';
+            });
+        }
 
-                let newOverallStatus = "Needs Ordering";
-                if(!anyNeeds && allOrdered) newOverallStatus = "Ordered";
-                if(allInStock) newOverallStatus = "In Stock";
+        window.cancelOrder = (id) => {
+            orderIdToCancel = id;
+            document.getElementById('confirmModal').style.display = 'flex';
+        };
 
-                // Prepare DB Update
-                const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", order.id);
-                
-                if (missingSupplyField) {
-                    let updates = {
-                        supplyStatus: currentMap,
-                        supplyDates: currentDateMap,
-                        statusStock: newOverallStatus
-                    };
-                    batch.update(ref, updates);
-                } else {
-                    let updates = { 
-                        [`supplyStatus.${cookieType}`]: newStatus,
-                        statusStock: newOverallStatus
-                    };
-                    
-                    if(newStatus === 'Ordered') {
-                        updates[`supplyDates.${cookieType}`] = orderDate;
-                    }
-                    batch.update(ref, updates);
-                }
-                count++;
-            }
-        });
+        window.closeConfirmModal = () => {
+            document.getElementById('confirmModal').style.display = 'none';
+            orderIdToCancel = null;
+        };
 
-        if (count > 0) {
+        window.proceedWithCancel = async () => {
+            if (!orderIdToCancel) return;
+
             try {
-                await batch.commit();
-                window.showMessage("Success", `Updated ${count} orders.`);
+                const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", orderIdToCancel);
+                await deleteDoc(ref);
+                window.closeConfirmModal();
+                window.showMessage("Order Cancelled", "The order has been removed.");
             } catch (e) {
                 console.error(e);
-                window.showMessage("Error", "Batch update failed.");
+                window.showMessage("Error", "Failed to cancel order.");
             }
-        } else {
-            window.showMessage("Info", "No matching orders found.");
-        }
-    };
+        };
 
-    // --- HELPERS ---
-    window.confirmSignup = async () => {
-        const id = document.getElementById('modal-booth-id').value;
-        const name = document.getElementById('volunteerName').value;
-        const email = document.getElementById('volunteerContact').value;
-        const boothDetails = document.getElementById('modal-booth-details').innerText;
-        
-        if(!name || !email) return window.showMessage("Missing Info", "Please enter name and email.");
-        
-        const boothRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/booths` : "booths", id);
-        try {
-            await updateDoc(boothRef, { volunteers: arrayUnion({ name: name, contact: email }) });
-            
-            window.showMessage("Success", "Thanks for signing up!");
-            window.closeModal();
-        } catch (e) { console.error(e); window.showMessage("Error", "Error signing up."); }
-    };
+        // --- BULK UPDATE LOGIC ---
+        window.markBulkStatus = async (cookieType, oldStatus, newStatus) => {
+            // Automatically use today's date - NO CONFIRMATION DIALOG
+            let orderDate = new Date().toLocaleDateString('en-US');
 
-    // --- BOOTH EDITING LOGIC ---
-    window.editBooth = (id) => {
-        const b = boothDataMap[id];
-        if(!b) return;
-        document.getElementById('newBoothLoc').value = b.location;
-        document.getElementById('newBoothAddress').value = b.address || "";
-        document.getElementById('newBoothDate').value = b.date;
-        document.getElementById('newBoothStart').value = b.start;
-        document.getElementById('newBoothEnd').value = b.end;
-        document.getElementById('newBoothNeeded').value = b.needed;
-        document.getElementById('editingBoothId').value = id;
-        
-        document.getElementById('boothSubmitBtn').innerText = "Update Booth Shift";
-        document.getElementById('boothCancelBtn').style.display = 'block';
-        document.querySelector('#admin-booths').scrollIntoView({behavior: 'smooth'});
-    };
+            const batch = writeBatch(db);
+            let count = 0;
 
-    window.cancelEditBooth = () => {
-        document.getElementById('newBoothLoc').value = "";
-        document.getElementById('newBoothAddress').value = "";
-        document.getElementById('newBoothDate').value = "";
-        document.getElementById('newBoothStart').value = "";
-        document.getElementById('newBoothEnd').value = "";
-        document.getElementById('newBoothNeeded').value = "2";
-        document.getElementById('editingBoothId').value = "";
-        
-        document.getElementById('boothSubmitBtn').innerText = "Add Booth Shift";
-        document.getElementById('boothCancelBtn').style.display = 'none';
-    };
+            currentOrders.forEach(order => {
+                // Only update orders that haven't been picked up yet
+                if (order.statusPickup === 'Picked Up') return;
 
-    window.saveBooth = async () => {
-        const id = document.getElementById('editingBoothId').value;
-        const loc = document.getElementById('newBoothLoc').value;
-        const addr = document.getElementById('newBoothAddress').value;
-        const date = document.getElementById('newBoothDate').value;
-        const start = document.getElementById('newBoothStart').value;
-        const end = document.getElementById('newBoothEnd').value;
-        const needed = document.getElementById('newBoothNeeded').value;
+                let currentMap = order.supplyStatus || {};
+                let currentDateMap = order.supplyDates || {};
+                let missingSupplyField = !order.supplyStatus;
 
-        if(!loc || !date || !start || !end) return window.showMessage("Missing Info", "Please fill all fields.");
+                // Legacy data fallback
+                if (Object.keys(currentMap).length === 0 && order.items) {
+                    Object.keys(order.items).forEach(k => currentMap[k] = order.statusStock);
+                }
 
-        try {
-            if (id) {
-                // Update Existing
-                const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/booths` : "booths", id);
-                await updateDoc(ref, { 
-                    location: loc, address: addr, date, start, end, needed: parseInt(needed) 
-                });
-                window.showMessage("Success", "Booth Shift Updated!");
+                // Check if this specific cookie matches status
+                if (currentMap[cookieType] === oldStatus && order.items[cookieType] > 0) {
+                    // Update local map first to calc new overall status
+                    currentMap[cookieType] = newStatus;
+
+                    if (newStatus === 'Ordered') {
+                        currentDateMap[cookieType] = orderDate;
+                    }
+
+                    // Calculate new overall status STOCK
+                    let allInStock = true;
+                    let anyNeeds = false;
+                    let allOrdered = true;
+
+                    Object.entries(currentMap).forEach(([k, s]) => {
+                        if (order.items[k] > 0) {
+                            if (s !== "In Stock") allInStock = false;
+                            if (s === "Needs Ordering") anyNeeds = true;
+                            if (s !== "Ordered" && s !== "In Stock") allOrdered = false;
+                        }
+                    });
+
+                    let newOverallStatus = "Needs Ordering";
+                    if (!anyNeeds && allOrdered) newOverallStatus = "Ordered";
+                    if (allInStock) newOverallStatus = "In Stock";
+
+                    // Prepare DB Update
+                    const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", order.id);
+
+                    if (missingSupplyField) {
+                        let updates = {
+                            supplyStatus: currentMap,
+                            supplyDates: currentDateMap,
+                            statusStock: newOverallStatus
+                        };
+                        batch.update(ref, updates);
+                    } else {
+                        let updates = {
+                            [`supplyStatus.${cookieType}`]: newStatus,
+                            statusStock: newOverallStatus
+                        };
+
+                        if (newStatus === 'Ordered') {
+                            updates[`supplyDates.${cookieType}`] = orderDate;
+                        }
+                        batch.update(ref, updates);
+                    }
+                    count++;
+                }
+            });
+
+            if (count > 0) {
+                try {
+                    await batch.commit();
+                    window.showMessage("Success", `Updated ${count} orders.`);
+                } catch (e) {
+                    console.error(e);
+                    window.showMessage("Error", "Batch update failed.");
+                }
             } else {
-                // Create New
-                await addDoc(getCollectionPath('booths'), {
-                    location: loc, address: addr, date, start, end, needed: parseInt(needed), volunteers: []
-                });
-                window.showMessage("Success", "Booth Shift Added!");
+                window.showMessage("Info", "No matching orders found.");
             }
-            window.cancelEditBooth(); // Reset form
-        } catch (e) { 
-            console.error(e); 
-            window.showMessage("Error", "Error saving booth."); 
+        };
+
+        // --- HELPERS ---
+        window.confirmSignup = async () => {
+            const id = document.getElementById('modal-booth-id').value;
+            const name = document.getElementById('volunteerName').value;
+            const email = document.getElementById('volunteerContact').value;
+            const boothDetails = document.getElementById('modal-booth-details').innerText;
+
+            const role = document.querySelector('input[name="role"]:checked').value;
+
+            if (!name || !email) return window.showMessage("Missing Info", "Please enter name and email.");
+
+            const boothRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/booths` : "booths", id);
+            try {
+                await updateDoc(boothRef, { volunteers: arrayUnion({ name: name, contact: email, role: role }) });
+
+                window.showMessage("Success", "Thanks for signing up!");
+                window.closeModal();
+            } catch (e) { console.error(e); window.showMessage("Error", "Error signing up."); }
+        };
+
+        // --- BOOTH EDITING LOGIC ---
+        window.editBooth = (id) => {
+            const b = boothDataMap[id];
+            if (!b) return;
+            document.getElementById('newBoothLoc').value = b.location;
+            document.getElementById('newBoothAddress').value = b.address || "";
+            document.getElementById('newBoothDate').value = b.date;
+            document.getElementById('newBoothStart').value = b.start;
+            document.getElementById('newBoothEnd').value = b.end;
+            document.getElementById('newBoothNeededAdults').value = b.neededAdults || 1;
+            document.getElementById('newBoothNeededScouts').value = b.neededScouts || 2;
+            document.getElementById('editingBoothId').value = id;
+
+            document.getElementById('boothSubmitBtn').innerText = "Update Booth Shift";
+            document.getElementById('boothCancelBtn').style.display = 'block';
+            document.querySelector('#admin-booths').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.cancelEditBooth = () => {
+            document.getElementById('newBoothLoc').value = "";
+            document.getElementById('newBoothAddress').value = "";
+            document.getElementById('newBoothDate').value = "";
+            document.getElementById('newBoothStart').value = "";
+            document.getElementById('newBoothEnd').value = "";
+            document.getElementById('newBoothNeededAdults').value = "1";
+            document.getElementById('newBoothNeededScouts').value = "2";
+            document.getElementById('editingBoothId').value = "";
+
+            document.getElementById('boothSubmitBtn').innerText = "Add Booth Shift";
+            document.getElementById('boothCancelBtn').style.display = 'none';
+        };
+
+        window.saveBooth = async () => {
+            const id = document.getElementById('editingBoothId').value;
+            const loc = document.getElementById('newBoothLoc').value;
+            const addr = document.getElementById('newBoothAddress').value;
+            const date = document.getElementById('newBoothDate').value;
+            const start = document.getElementById('newBoothStart').value;
+            const end = document.getElementById('newBoothEnd').value;
+            const neededAdults = document.getElementById('newBoothNeededAdults').value;
+            const neededScouts = document.getElementById('newBoothNeededScouts').value;
+
+            if (!loc || !date || !start || !end) return window.showMessage("Missing Info", "Please fill all fields.");
+
+            try {
+                if (id) {
+                    // Update Existing
+                    const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/booths` : "booths", id);
+                    await updateDoc(ref, {
+                        location: loc, address: addr, date, start, end,
+                        neededAdults: parseInt(neededAdults), neededScouts: parseInt(neededScouts)
+                    });
+                    window.showMessage("Success", "Booth Shift Updated!");
+                } else {
+                    // Create New
+                    await addDoc(getCollectionPath('booths'), {
+                        location: loc, address: addr, date, start, end,
+                        neededAdults: parseInt(neededAdults), neededScouts: parseInt(neededScouts),
+                        volunteers: []
+                    });
+                    window.showMessage("Success", "Booth Shift Added!");
+                }
+                window.cancelEditBooth(); // Reset form
+            } catch (e) {
+                console.error(e);
+                window.showMessage("Error", "Error saving booth.");
+            }
+        };
+
+        window.deleteBooth = async (id) => {
+            if (!confirm("Are you sure you want to delete this booth shift?")) return;
+            const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/booths` : "booths", id);
+            try {
+                await deleteDoc(ref);
+            } catch (e) {
+                console.error(e);
+                window.showMessage("Error", "Error deleting booth.");
+            }
+        };
+
+        window.cycleStatus = async (id, field, currentVal) => {
+            let newVal = currentVal;
+
+            // Updated cycle logic.
+            // For Orders tab, only statusPickup is cycled manually.
+            // For Accounting tab, statusPaid is cycled manually.
+
+            if (field === 'statusPaid') newVal = currentVal === "Unpaid" ? "Paid" : "Unpaid";
+            else if (field === 'statusPickup') newVal = currentVal === "Pending" ? "Picked Up" : "Pending";
+            else return; // Should not manually change statusStock anymore
+
+            const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", id);
+            try {
+                await updateDoc(ref, { [field]: newVal });
+            } catch (e) { console.error(e); }
+        };
+
+        function formatDate(dateStr) {
+            if (!dateStr) return "";
+            const parts = dateStr.split('-');
+            const d = new Date(parts[0], parts[1] - 1, parts[2]);
+            return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
         }
-    };
 
-    window.deleteBooth = async (id) => {
-        if(!confirm("Are you sure you want to delete this booth shift?")) return;
-        const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/booths` : "booths", id);
-        try {
-            await deleteDoc(ref);
-        } catch(e) {
-            console.error(e);
-            window.showMessage("Error", "Error deleting booth.");
+        function formatTime(timeStr) {
+            if (!timeStr) return "";
+            const [hours, minutes] = timeStr.split(':');
+            const h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 || 12;
+            return `${h12}:${minutes} ${ampm}`;
         }
-    };
 
-    window.cycleStatus = async (id, field, currentVal) => {
-        let newVal = currentVal;
-        
-        // Updated cycle logic.
-        // For Orders tab, only statusPickup is cycled manually.
-        // For Accounting tab, statusPaid is cycled manually.
-        
-        if(field === 'statusPaid') newVal = currentVal === "Unpaid" ? "Paid" : "Unpaid";
-        else if(field === 'statusPickup') newVal = currentVal === "Pending" ? "Picked Up" : "Pending";
-        else return; // Should not manually change statusStock anymore
-
-        const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", id);
-        try {
-            await updateDoc(ref, { [field]: newVal });
-        } catch(e) { console.error(e); }
-    };
-
-    function formatDate(dateStr) {
-        if(!dateStr) return "";
-        const parts = dateStr.split('-');
-        const d = new Date(parts[0], parts[1]-1, parts[2]);
-        return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-    }
-
-    function formatTime(timeStr) {
-        if(!timeStr) return "";
-        const [hours, minutes] = timeStr.split(':');
-        const h = parseInt(hours);
-        const ampm = h >= 12 ? 'PM' : 'AM';
-        const h12 = h % 12 || 12;
-        return `${h12}:${minutes} ${ampm}`;
-    }
-
-</script>
+    </script>
 </body>
+
 </html>
