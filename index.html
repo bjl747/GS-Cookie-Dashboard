@@ -592,6 +592,7 @@
         <!-- Navigation -->
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('booth-tab')">📍 Booth Info & Signup</button>
+            <button class="tab-btn" onclick="switchTab('pickup-tab')">📅 Cookie Pickup</button>
             <button class="tab-btn" onclick="switchTab('order-tab')">📝 Order Cookies</button>
             <button class="tab-btn admin-lock" onclick="checkAdmin()">🔒 Admin</button>
         </div>
@@ -602,6 +603,14 @@
             <p>We need your help to sell cookies! Sign up for a shift below.</p>
             <div id="booths-loader" style="text-align:center; padding:20px; color:#666;">Loading schedule...</div>
             <div id="booths-container"></div>
+        </div>
+
+        <!-- PUBLIC: Cookie Pickup -->
+        <div id="pickup-tab" class="section">
+            <h2>Schedule a Cookie Pickup</h2>
+            <p>Select a time slot to pick up your cookies from the cupboard.</p>
+            <div id="pickup-loader" style="text-align:center; padding:20px; color:#666;">Loading schedule...</div>
+            <div id="pickup-container"></div>
         </div>
 
         <!-- PUBLIC: Order Form -->
@@ -660,6 +669,7 @@
                 <button class="admin-sub-btn" onclick="switchAdminSub('admin-supply', this)">Inventory</button>
                 <button class="admin-sub-btn" onclick="switchAdminSub('admin-accounting', this)">Accounting</button>
                 <button class="admin-sub-btn" onclick="switchAdminSub('admin-booths', this)">Manage Booths</button>
+                <button class="admin-sub-btn" onclick="switchAdminSub('admin-pickups', this)">Manage Pickups</button>
             </div>
 
             <!-- Admin: Orders View -->
@@ -875,6 +885,36 @@
                 <h3>Current Schedule</h3>
                 <div id="admin-booth-list"></div>
             </div>
+
+            <!-- Admin: Pickup Management -->
+            <div id="admin-pickups" class="admin-sub-view" style="display:none;">
+                <div
+                    style="background:#f9f9f9; padding:20px; border:1px solid #ddd; border-radius:8px; margin-bottom:30px;">
+                    <h3 style="margin-top:0;">Add Pickup Schedule Block</h3>
+                    <p style="color:#666; font-size:0.9rem;">This will automatically generate 15-minute slots for the
+                        duration.</p>
+
+                    <div style="display:flex; gap:20px; align-items:flex-end;">
+                        <div>
+                            <label>Date</label>
+                            <input type="date" id="newPickupDate">
+                        </div>
+                        <div>
+                            <label>Start Time</label>
+                            <input type="time" id="newPickupStart">
+                        </div>
+                        <div>
+                            <label>End Time</label>
+                            <input type="time" id="newPickupEnd">
+                        </div>
+                        <button class="action-btn" style="margin-bottom:2px;" onclick="savePickupBlock()">Create
+                            Schedule</button>
+                    </div>
+                </div>
+
+                <h3>Upcoming Schedule Blocks</h3>
+                <div id="admin-pickup-list"></div>
+            </div>
         </div>
     </div>
 
@@ -943,6 +983,36 @@
 
             <button class="action-btn" onclick="confirmSignup()">Confirm Sign Up</button>
         </div>
+    </div>
+
+    <!-- Modal for Pickup Booking -->
+    <div id="pickupModal" class="modal-overlay">
+        <div class="modal">
+            <span class="close-modal" onclick="closePickupModal()">&times;</span>
+            <h3>Book Pickup Slot</h3>
+            <p id="modal-pickup-details" style="font-weight:bold; color:var(--gs-blue); margin-bottom:5px;"></p>
+            <p id="modal-pickup-time" style="margin-top:0; color:#666;"></p>
+
+            <input type="hidden" id="modal-pickup-id">
+            <input type="hidden" id="modal-pickup-slot-idx">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <label>Parent/Guardian Name</label>
+                    <input type="text" id="pickupParent" placeholder="Name">
+                </div>
+                <div>
+                    <label>Scout Name</label>
+                    <input type="text" id="pickupScout" placeholder="Name">
+                </div>
+            </div>
+
+            <label>Cell Number</label>
+            <input type="text" id="pickupCell" placeholder="(555) 123-4567">
+
+            <button class="action-btn" onclick="confirmPickup()">Book Slot</button>
+        </div>
+    </div>
     </div>
 
     <!-- Generic Message Modal (Replaces Alert) -->
@@ -1107,8 +1177,9 @@
 
             const btns = document.querySelectorAll('.tab-btn');
             if (tabId === 'booth-tab') btns[0].classList.add('active');
-            if (tabId === 'order-tab') btns[1].classList.add('active');
-            if (tabId === 'admin-tab') btns[2].classList.add('active');
+            if (tabId === 'pickup-tab') btns[1].classList.add('active');
+            if (tabId === 'order-tab') btns[2].classList.add('active');
+            if (tabId === 'admin-tab') btns[3].classList.add('active');
         };
 
         window.switchAdminSub = (subId, btn) => {
@@ -1161,6 +1232,7 @@
                 renderOrderForm();
                 listenToBooths();
                 listenToOrders();
+                listenToPickups();
             }
         });
 
@@ -1439,6 +1511,171 @@
                     btn.innerText = "Submit Order";
                 }
             }
+        };
+
+        // --- PICKUP LOGIC ---
+        function listenToPickups() {
+            const q = getCollectionPath('pickup_events');
+            onSnapshot(q, (snapshot) => {
+                const container = document.getElementById('pickup-container');
+                const adminList = document.getElementById('admin-pickup-list');
+                document.getElementById('pickup-loader').style.display = 'none';
+
+                let events = [];
+                snapshot.forEach(doc => {
+                    events.push({ id: doc.id, ...doc.data() });
+                });
+                events.sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
+
+                // Render Public
+                let html = "";
+                let adminHtml = "";
+
+                if (events.length === 0) html = "<p>No pickup times scheduled yet.</p>";
+
+                events.forEach(ev => {
+                    const dateDisplay = formatDate(ev.date);
+
+                    // Public Grid
+                    let slotsHtml = `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:10px; margin-top:10px;">`;
+                    ev.slots.forEach((slot, idx) => {
+                        let style = slot.booked
+                            ? `background:#ddd; color:#999; cursor:not-allowed; border:1px solid #ccc;`
+                            : `background:white; color:var(--gs-green); border:1px solid var(--gs-green); cursor:pointer;`;
+
+                        if (!slot.booked) {
+                            slotsHtml += `<button style="padding:10px; border-radius:4px; font-weight:bold; ${style}" onclick="window.openPickupModal('${ev.id}', ${idx}, '${dateDisplay}', '${formatTime(slot.time)}')">${formatTime(slot.time)}</button>`;
+                        } else {
+                            slotsHtml += `<button disabled style="padding:10px; border-radius:4px; ${style}">${formatTime(slot.time)}<br><span style="font-size:0.7rem">TAKEN</span></button>`;
+                        }
+                    });
+                    slotsHtml += `</div>`;
+
+                    html += `
+                    <div style="background:white; border-left:5px solid var(--gs-green); padding:20px; margin-bottom:20px; border-radius:4px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                        <h3 style="margin:0; color:#333;">${dateDisplay}</h3>
+                        <p style="margin:5px 0 15px 0; color:#666;">${formatTime(ev.start)} - ${formatTime(ev.end)}</p>
+                        ${slotsHtml}
+                    </div>
+                `;
+
+                    // Admin List
+                    let bookedCount = ev.slots.filter(s => s.booked).length;
+                    let totalCount = ev.slots.length;
+
+                    adminHtml += `
+                    <div style="background:white; border:1px solid #ddd; padding:15px; margin-bottom:10px; border-radius:4px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong>${dateDisplay}</strong><br>
+                                ${formatTime(ev.start)} - ${formatTime(ev.end)}<br>
+                                <span style="font-size:0.9rem; color:var(--gs-green);">${bookedCount}/${totalCount} slots booked</span>
+                            </div>
+                            <button onclick="window.deletePickup('${ev.id}')" style="background:#d9534f; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Delete Block</button>
+                        </div>
+                        <!-- Show details of booked slots -->
+                        <div style="margin-top:10px; font-size:0.85rem; border-top:1px solid #eee; padding-top:10px;">
+                            ${ev.slots.filter(s => s.booked).map(s => `
+                                <div style="margin-bottom:4px;">
+                                    <strong>${formatTime(s.time)}:</strong> ${s.details.parentName} (${s.details.scoutName}) - ${s.details.cell}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                });
+
+                container.innerHTML = html;
+                adminList.innerHTML = adminHtml;
+            });
+        }
+
+        window.savePickupBlock = async () => {
+            const date = document.getElementById('newPickupDate').value;
+            const start = document.getElementById('newPickupStart').value;
+            const end = document.getElementById('newPickupEnd').value;
+
+            if (!date || !start || !end) return window.showMessage("Missing Info", "Please fill all fields.");
+            if (start >= end) return window.showMessage("Invalid Time", "Start time must be before end time.");
+
+            // Generate Slots
+            let slots = [];
+            let currH = parseInt(start.split(':')[0]);
+            let currM = parseInt(start.split(':')[1]);
+            const endH = parseInt(end.split(':')[0]);
+            const endM = parseInt(end.split(':')[1]);
+
+            const MINS_IN_DAY = 24 * 60;
+            let cVal = currH * 60 + currM;
+            let eVal = endH * 60 + endM;
+
+            while (cVal < eVal) {
+                let h = Math.floor(cVal / 60);
+                let m = cVal % 60;
+                let timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+                slots.push({ time: timeStr, booked: false, details: null });
+                cVal += 15; // 15 min interval
+            }
+
+            try {
+                await addDoc(getCollectionPath('pickup_events'), {
+                    date, start, end, slots
+                });
+                window.showMessage("Success", "Schedule Block Created!");
+                // Reset
+                document.getElementById('newPickupDate').value = "";
+                document.getElementById('newPickupStart').value = "";
+                document.getElementById('newPickupEnd').value = "";
+            } catch (e) { console.error(e); window.showMessage("Error", "Could not create block."); }
+        };
+
+        window.deletePickup = async (id) => {
+            if (!confirm("Delete this schedule block? This will cancel all bookings in it.")) return;
+            const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/pickup_events` : "pickup_events", id);
+            try { await deleteDoc(ref); } catch (e) { console.error(e); }
+        };
+
+        // Pickup Booking Methods
+        window.openPickupModal = (id, idx, dateStr, timeStr) => {
+            document.getElementById('modal-pickup-id').value = id;
+            document.getElementById('modal-pickup-slot-idx').value = idx;
+            document.getElementById('modal-pickup-details').innerText = dateStr;
+            document.getElementById('modal-pickup-time').innerText = timeStr;
+            document.getElementById('pickupModal').style.display = 'flex';
+        };
+
+        window.closePickupModal = () => {
+            document.getElementById('pickupModal').style.display = 'none';
+        };
+
+        window.confirmPickup = async () => {
+            const id = document.getElementById('modal-pickup-id').value;
+            const idx = parseInt(document.getElementById('modal-pickup-slot-idx').value);
+            const parent = document.getElementById('pickupParent').value;
+            const scout = document.getElementById('pickupScout').value;
+            const cell = document.getElementById('pickupCell').value;
+
+            if (!parent || !scout || !cell) return window.showMessage("Missing Info", "Please fill all fields.");
+
+            const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/pickup_events` : "pickup_events", id);
+            try {
+                const snap = await getDoc(ref);
+                if (!snap.exists()) return;
+                let slots = snap.data().slots;
+
+                if (slots[idx].booked) return window.showMessage("Sorry", "Slot was just taken!");
+
+                slots[idx].booked = true;
+                slots[idx].details = { parentName: parent, scoutName: scout, cell: cell };
+
+                await updateDoc(ref, { slots: slots });
+                window.showMessage("Success", "Pickup Confirmed!");
+                window.closePickupModal();
+                // Clear inputs
+                document.getElementById('pickupParent').value = "";
+                document.getElementById('pickupScout').value = "";
+                document.getElementById('pickupCell').value = "";
+            } catch (e) { console.error(e); window.showMessage("Error", "Booking failed."); }
         };
 
         function listenToBooths() {
