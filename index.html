@@ -205,20 +205,37 @@
             color: var(--gs-brown);
         }
 
-        /* Total Case */
+        /* Total Case - Redesigned */
         .total-container {
-            background: #e8f5e9;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
+            background: linear-gradient(135deg, var(--gs-green), #008c44);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
             margin-top: 30px;
-            border: 1px solid var(--gs-green);
+            box-shadow: 0 4px 15px rgba(0, 174, 88, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
         .total-price {
-            font-size: 2rem;
-            color: var(--gs-green);
+            font-size: 2.5rem;
             font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .total-cases-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: inline-block;
         }
 
         /* Booth Cards */
@@ -609,12 +626,11 @@
             <div id="cookie-list" class="cookie-grid"></div>
 
             <div class="total-container">
-                <div>
-                    Total
-                    <span id="totalCasesDisplay"
-                        style="font-weight:normal; font-size:0.9rem; margin-left:10px; color:#555;">0 Cases</span>
+                <div style="text-align:left;">
+                    <div class="total-label">Estimated Total</div>
+                    <span id="totalCasesDisplay" class="total-cases-badge">0 Cases</span>
                 </div>
-                <div id="totalPrice">$0.00</div>
+                <div id="totalPrice" class="total-price">$0.00</div>
             </div>
 
             <div class="form-group">
@@ -628,6 +644,10 @@
             <div class="form-group">
                 <label>Contact Email</label>
                 <input type="email" id="orderEmail" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label>Cell Number</label>
+                <input type="text" id="orderPhone" placeholder="(555) 123-4567">
             </div>
 
             <button class="action-btn" id="submitOrderBtn" onclick="submitOrder()">Submit Order</button>
@@ -1430,18 +1450,26 @@
         window.submitOrder = async () => {
             if (!currentUser) return window.showMessage("System", "System connecting... please wait.");
 
-            const btn = document.getElementById('submitBtn');
-            const customerInput = document.getElementById('custName');
-            const scoutInput = document.getElementById('gsName');
-            const contactInput = document.getElementById('contactNum');
-            const emailInput = document.getElementById('email');
+            const btn = document.getElementById('submitOrderBtn');
+            // FIX: Match IDs to HTML
+            const customerInput = document.getElementById('orderParentName');
+            const scoutInput = document.getElementById('orderScoutName');
+            const emailInput = document.getElementById('orderEmail');
+
+            // NOTE: There is no cell/contact input in the HTML based on my read? 
+            // Let me check HTML again. Lines 620-631 show specific inputs.
+            // I will assume for now we need to add a phone number field or remove it from requirement.
+            // The previous JS required 'contactNum'. The HTML does NOT show a phone input.
+            // I will add a phone input to the HTML as well since it's likely needed.
 
             const customer = customerInput.value;
             const scout = scoutInput.value;
-            const contact = contactInput.value;
             const email = emailInput.value;
+            // Placeholder for phone
+            const contactInput = document.getElementById('orderPhone');
+            const contact = contactInput ? contactInput.value : "N/A";
 
-            if (!customer || !scout || !contact || !email) return window.showMessage("Missing Info", "All contact fields are required.");
+            if (!customer || !scout || !email) return window.showMessage("Missing Info", "Please fill in all fields.");
             if (!customer.includes(' ') || !scout.includes(' ')) return window.showMessage("Full Name Required", "Please enter both First and Last names.");
 
             let orderItems = {};
@@ -1468,7 +1496,7 @@
 
             const totalCost = totalCases * CASE_PRICE;
             const inventoryRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
-            const newOrderRef = doc(getCollectionPath('orders')); // Create ref for new ID
+            const newOrderRef = doc(getCollectionPath('orders'));
 
             try {
                 await runTransaction(db, async (transaction) => {
@@ -1494,7 +1522,7 @@
                     let initialStatus = canFulfill ? "In Stock" : "Needs Ordering";
 
                     const orderData = {
-                        customer, scout, contact, email,
+                        customer, scout, email, contact, // Added contact
                         items: orderItems,
                         totalCases: totalCases,
                         totalCost: totalCost,
@@ -1513,16 +1541,15 @@
 
                 window.showMessage("Thank You!", "Thank you for your order. Your troop leader will be in contact with more info soon.");
 
-                // RESET FORM
-                document.getElementById('orderForm').reset();
-                renderOrderForm(); // Clears cookies
-                document.getElementById('totalPrice').innerText = "0";
-
-                // Explicitly clear inputs
+                // RESET INPUTS MANUALLY
                 customerInput.value = "";
                 scoutInput.value = "";
-                contactInput.value = "";
                 emailInput.value = "";
+                if (contactInput) contactInput.value = "";
+
+                renderOrderForm(); // Clears cookies
+                document.getElementById('totalPrice').innerText = "$0.00";
+                document.getElementById('totalCasesDisplay').innerText = "0 Cases";
 
             } catch (e) {
                 console.error(e);
