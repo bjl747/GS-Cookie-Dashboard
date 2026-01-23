@@ -1023,7 +1023,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, setDoc, deleteDoc, query, orderBy, arrayUnion, writeBatch, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, setDoc, deleteDoc, query, orderBy, arrayUnion, writeBatch, getDoc, runTransaction, getDocs, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         // --- GITHUB DEPLOYMENT CONFIGURATION ---
@@ -1141,6 +1141,10 @@
             }
         };
 
+        window.logoutAdmin = () => {
+            location.reload();
+        };
+
         // --- GENERAL MODAL LOGIC ---
         window.showMessage = (title, body) => {
             document.getElementById('msgTitle').innerText = title;
@@ -1152,9 +1156,6 @@
             document.getElementById('messageModal').style.display = 'none';
         };
 
-        window.logoutAdmin = () => {
-            location.reload();
-        };
 
         window.switchTab = (tabId) => {
             if (tabId === 'admin-tab') {
@@ -1313,84 +1314,115 @@
 
             const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
             try {
-                await setDoc(docRef, newStock);
+                // Use transaction to set stock safely
+                await runTransaction(db, async (transaction) => {
+                    transaction.set(docRef, newStock);
+                });
+
                 window.closeStockModal();
                 window.showMessage("Success", "Stock counts updated!");
-                // After stock update, run check to fulfill pending orders
-                window.autoFulfillOrders(newStock);
+
+                // Trigger fulfillment attempts
+                window.autoFulfillOrders();
             } catch (e) {
                 console.error(e);
                 window.showMessage("Error", "Could not save stock.");
             }
         };
 
-        window.autoFulfillOrders = async (stockData) => {
-            const batch = writeBatch(db);
-            let updatedCount = 0;
-            let tempStock = { ...stockData }; // Working copy
+        window.autoFulfillOrders = async () => {
+            const inventoryRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
 
-            // Sort orders oldest first to fulfill FCFS
-            let sortedOrders = [...currentOrders].sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
+            // 1. Unsafe Read of potential candidates (limit 20 to avoid transaction limits)
+            // We only care about orders that need stock.
+            // Note: We can't query inside client transaction easily, so we query first.
+            const q = query(
+                getCollectionPath('orders'),
+                where("statusStock", "in", ["Needs Ordering", "Ordered"]),
+                orderBy("timestamp", "asc")
+            );
 
-            sortedOrders.forEach(order => {
-                // Skip picked up orders
-                if (order.statusPickup === 'Picked Up') return;
+            try {
+                const querySnapshot = await getDocs(q);
 
-                let currentMap = order.supplyStatus || {};
-                // Init legacy map
-                if (Object.keys(currentMap).length === 0 && order.items) {
-                    Object.keys(order.items).forEach(k => currentMap[k] = order.statusStock);
-                }
+                if (querySnapshot.empty) return;
 
-                let orderChanged = false;
-                let newMap = { ...currentMap };
+                // 2. Transactional Allocation
+                await runTransaction(db, async (transaction) => {
+                    // Re-read inventory inside transaction
+                    const invDoc = await transaction.get(inventoryRef);
+                    if (!invDoc.exists()) throw "Inventory missing";
 
-                // Check each item in order
-                Object.keys(order.items).forEach(cookie => {
-                    let needed = order.items[cookie];
-                    let status = newMap[cookie];
+                    let tempStock = invDoc.data();
+                    let updatedCount = 0;
 
-                    // If not In Stock, try to fill from cupboard
-                    if (status !== 'In Stock') {
-                        if (tempStock[cookie] >= needed) {
-                            tempStock[cookie] -= needed; // Deduct from working stock
-                            newMap[cookie] = 'In Stock';
-                            orderChanged = true;
+                    for (const orderDoc of querySnapshot.docs) {
+                        // Re-read order inside transaction to ensure atomicity
+                        const freshOrderSnap = await transaction.get(orderDoc.ref);
+                        if (!freshOrderSnap.exists()) continue;
+
+                        const order = { id: freshOrderSnap.id, ...freshOrderSnap.data() };
+
+                        if (order.statusPickup === 'Picked Up') continue;
+                        if (order.statusStock === 'In Stock') continue; // Already fulfilled by someone else
+
+                        let currentMap = order.supplyStatus || {};
+                        // Init legacy map
+                        if (Object.keys(currentMap).length === 0 && order.items) {
+                            Object.keys(order.items).forEach(k => currentMap[k] = order.statusStock);
                         }
+
+                        let orderChanged = false;
+                        let newMap = { ...currentMap };
+
+                        Object.keys(order.items).forEach(cookie => {
+                            let needed = order.items[cookie];
+                            let status = newMap[cookie];
+
+                            if (status !== 'In Stock') {
+                                if ((tempStock[cookie] || 0) >= needed) {
+                                    tempStock[cookie] -= needed;
+                                    newMap[cookie] = 'In Stock';
+                                    orderChanged = true;
+                                }
+                            }
+                        });
+
+
+                        if (orderChanged) {
+                            // Recalculate Overall Status
+                            let allInStock = true;
+                            let anyNeeds = false;
+                            let allOrdered = true;
+
+                            Object.values(newMap).forEach(s => {
+                                if (s !== "In Stock") allInStock = false;
+                                if (s === "Needs Ordering") anyNeeds = true;
+                                if (s !== "Ordered" && s !== "In Stock") allOrdered = false;
+                            });
+
+                            let newOverallStatus = "Needs Ordering";
+                            if (!anyNeeds && allOrdered) newOverallStatus = "Ordered";
+                            if (allInStock) newOverallStatus = "In Stock";
+
+                            transaction.update(freshOrderSnap.ref, {
+                                supplyStatus: newMap,
+                                statusStock: newOverallStatus
+                            });
+                            updatedCount++;
+                        }
+                    }
+
+                    // Write updated stock
+                    if (updatedCount > 0) {
+                        transaction.set(inventoryRef, tempStock);
                     }
                 });
 
-                if (orderChanged) {
-                    // Recalculate Overall Status
-                    let allInStock = true;
-                    let anyNeeds = false;
-                    let allOrdered = true;
+                // console.log("Auto-fulfill run completed.");
 
-                    Object.values(newMap).forEach(s => {
-                        if (s !== "In Stock") allInStock = false;
-                        if (s === "Needs Ordering") anyNeeds = true;
-                        if (s !== "Ordered" && s !== "In Stock") allOrdered = false;
-                    });
-
-                    let newOverallStatus = "Needs Ordering";
-                    if (!anyNeeds && allOrdered) newOverallStatus = "Ordered";
-                    if (allInStock) newOverallStatus = "In Stock";
-
-                    const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/orders` : "orders", order.id);
-                    batch.update(ref, {
-                        supplyStatus: newMap,
-                        statusStock: newOverallStatus
-                    });
-                    updatedCount++;
-                }
-            });
-
-            if (updatedCount > 0) {
-                await batch.commit();
-                // Update the cupboard stock with final values
-                const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
-                await setDoc(docRef, tempStock);
-                window.showMessage("Auto-Fulfill", `Allocated stock to ${updatedCount} orders.`);
+            } catch (e) {
+                console.error("Auto Fulfill Error:", e);
             }
         };
 
@@ -1415,11 +1447,6 @@
             let orderItems = {};
             let totalCases = 0;
             let summaryText = "";
-            let supplyStatusMap = {};
-
-            // Check if we can fulfill immediately from stock
-            let tempStock = { ...currentStock };
-            let canFulfill = true;
 
             cookies.forEach((cookie, i) => {
                 const qty = document.getElementById(`qty-${i}`).value;
@@ -1428,50 +1455,61 @@
                     orderItems[cookie] = count;
                     totalCases += count;
                     summaryText += `${count}x ${cookie}, `;
-
-                    // Logic: If in stock, mark In Stock immediately and reserve
-                    if (tempStock[cookie] >= count) {
-                        tempStock[cookie] -= count;
-                        supplyStatusMap[cookie] = "In Stock";
-                    } else {
-                        supplyStatusMap[cookie] = "Needs Ordering";
-                        canFulfill = false;
-                    }
                 }
             });
 
             if (totalCases === 0) return window.showMessage("Missing Info", "Please select at least one case of cookies.");
 
-            // DISABLE BUTTON HERE
+            // DISABLE BUTTON
             if (btn) {
                 btn.disabled = true;
                 btn.innerText = "Processing...";
             }
 
             const totalCost = totalCases * CASE_PRICE;
-            let initialStatus = canFulfill ? "In Stock" : "Needs Ordering";
-
-            const orderData = {
-                customer, scout, contact, email,
-                items: orderItems,
-                totalCases: totalCases,
-                totalCost: totalCost,
-                statusStock: initialStatus,
-                supplyStatus: supplyStatusMap,
-                supplyDates: {},
-                statusPaid: "Unpaid",
-                statusPickup: "Pending",
-                timestamp: new Date()
-            };
+            const inventoryRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
+            const newOrderRef = doc(getCollectionPath('orders')); // Create ref for new ID
 
             try {
-                await addDoc(getCollectionPath('orders'), orderData);
+                await runTransaction(db, async (transaction) => {
+                    const invDoc = await transaction.get(inventoryRef);
+                    if (!invDoc.exists()) throw "Inventory not found!";
 
-                // If we reserved stock, update the DB
-                if (JSON.stringify(tempStock) !== JSON.stringify(currentStock)) {
-                    const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
-                    await setDoc(docRef, tempStock);
-                }
+                    const serverStock = invDoc.data();
+                    let tempStock = { ...serverStock };
+                    let supplyStatusMap = {};
+                    let canFulfill = true;
+
+                    // Check Stock
+                    Object.entries(orderItems).forEach(([cookie, count]) => {
+                        if ((tempStock[cookie] || 0) >= count) {
+                            tempStock[cookie] -= count;
+                            supplyStatusMap[cookie] = "In Stock";
+                        } else {
+                            supplyStatusMap[cookie] = "Needs Ordering";
+                            canFulfill = false;
+                        }
+                    });
+
+                    let initialStatus = canFulfill ? "In Stock" : "Needs Ordering";
+
+                    const orderData = {
+                        customer, scout, contact, email,
+                        items: orderItems,
+                        totalCases: totalCases,
+                        totalCost: totalCost,
+                        statusStock: initialStatus,
+                        supplyStatus: supplyStatusMap,
+                        supplyDates: {},
+                        statusPaid: "Unpaid",
+                        statusPickup: "Pending",
+                        timestamp: new Date()
+                    };
+
+                    // Commit Changes
+                    transaction.set(newOrderRef, orderData);
+                    transaction.set(inventoryRef, tempStock);
+                });
 
                 window.showMessage("Thank You!", "Thank you for your order. Your troop leader will be in contact with more info soon.");
 
@@ -1480,7 +1518,7 @@
                 renderOrderForm(); // Clears cookies
                 document.getElementById('totalPrice').innerText = "0";
 
-                // Explicitly clear inputs just in case
+                // Explicitly clear inputs
                 customerInput.value = "";
                 scoutInput.value = "";
                 contactInput.value = "";
@@ -1488,9 +1526,8 @@
 
             } catch (e) {
                 console.error(e);
-                window.showMessage("Error", "Error submitting order. Please try again.");
+                window.showMessage("Error", "Error placing order. Please try again. Stock may have changed.");
             } finally {
-                // RE-ENABLE BUTTON
                 if (btn) {
                     btn.disabled = false;
                     btn.innerText = "Submit Order";
