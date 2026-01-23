@@ -1595,7 +1595,12 @@
                         if (!slot.booked) {
                             slotsHtml += `<button style="padding:10px; border-radius:4px; font-weight:bold; ${style}" onclick="window.openPickupModal('${ev.id}', ${idx}, '${dateDisplay}', '${formatTime(slot.time)}')">${formatTime(slot.time)}</button>`;
                         } else {
-                            slotsHtml += `<button disabled style="padding:10px; border-radius:4px; ${style}">${formatTime(slot.time)}<br><span style="font-size:0.7rem">TAKEN</span></button>`;
+                            // Show first name only for privacy/space if desired, or full name. Using full parent name for now.
+                            // Adding a text-overflow check style just in case
+                            let name = slot.details ? slot.details.parentName : "Booked";
+                            if(name.length > 10) name = name.substring(0, 8) + "..";
+                            
+                            slotsHtml += `<button disabled style="padding:10px; border-radius:4px; ${style}; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" title="${slot.details?.parentName}">${formatTime(slot.time)}<br><span style="font-size:0.7rem">${name}</span></button>`;
                         }
                     });
                     slotsHtml += `</div>`;
