@@ -1595,12 +1595,15 @@
                         if (!slot.booked) {
                             slotsHtml += `<button style="padding:10px; border-radius:4px; font-weight:bold; ${style}" onclick="window.openPickupModal('${ev.id}', ${idx}, '${dateDisplay}', '${formatTime(slot.time)}')">${formatTime(slot.time)}</button>`;
                         } else {
-                            // Show first name only for privacy/space if desired, or full name. Using full parent name for now.
-                            // Adding a text-overflow check style just in case
+                            // Show details popup on click
+                            const safeName = (slot.details?.parentName || "Unknown").replace(/'/g, "\\'");
+                            const safeScout = (slot.details?.scoutName || "").replace(/'/g, "\\'");
+                            const safeTime = formatTime(slot.time);
+
                             let name = slot.details ? slot.details.parentName : "Booked";
-                            if(name.length > 10) name = name.substring(0, 8) + "..";
-                            
-                            slotsHtml += `<button disabled style="padding:10px; border-radius:4px; ${style}; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" title="${slot.details?.parentName}">${formatTime(slot.time)}<br><span style="font-size:0.7rem">${name}</span></button>`;
+                            if (name.length > 10) name = name.substring(0, 8) + "..";
+
+                            slotsHtml += `<button style="padding:10px; border-radius:4px; ${style}; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; cursor:pointer;" title="${slot.details?.parentName}" onclick="window.showMessage('Pickup Details', 'Time: ${safeTime}\\nName: ${safeName}\\nScout: ${safeScout}')">${safeTime}<br><span style="font-size:0.7rem">${name}</span></button>`;
                         }
                     });
                     slotsHtml += `</div>`;
