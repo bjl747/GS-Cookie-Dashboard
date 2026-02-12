@@ -1632,11 +1632,17 @@
                         </div>
                         <!-- Show details of booked slots -->
                         <div style="margin-top:10px; font-size:0.85rem; border-top:1px solid #eee; padding-top:10px;">
-                            ${ev.slots.filter(s => s.booked).map(s => `
-                                <div style="margin-bottom:4px;">
-                                    <strong>${formatTime(s.time)}:</strong> ${s.details.parentName} (${s.details.scoutName}) - ${s.details.cell}
+                        <div style="margin-top:10px; font-size:0.85rem; border-top:1px solid #eee; padding-top:10px;">
+                            ${ev.slots.map((s, idx) => {
+                        if (!s.booked) return '';
+                        return `
+                                <div style="margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+                                    <span><strong>${formatTime(s.time)}:</strong> ${s.details.parentName} (${s.details.scoutName}) - ${s.details.cell}</span>
+                                    <button onclick="window.cancelPickupBooking('${ev.id}', ${idx})" style="background:#d9534f; color:white; border:none; padding:2px 6px; border-radius:3px; cursor:pointer; font-size:0.8rem;">Cancel Booking</button>
                                 </div>
-                            `).join('')}
+                                `;
+                    }).join('')}
+                        </div>
                         </div>
                     </div>
                 `;
@@ -1690,6 +1696,26 @@
             if (!confirm("Delete this schedule block? This will cancel all bookings in it.")) return;
             const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/pickup_events` : "pickup_events", id);
             try { await deleteDoc(ref); } catch (e) { console.error(e); }
+        };
+
+        window.cancelPickupBooking = async (id, idx) => {
+            if (!confirm("Are you sure you want to cancel this booking?")) return;
+            const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/pickup_events` : "pickup_events", id);
+            try {
+                const snap = await getDoc(ref);
+                if (!snap.exists()) return;
+                let slots = snap.data().slots;
+
+                // Reset slot
+                slots[idx].booked = false;
+                slots[idx].details = null;
+
+                await updateDoc(ref, { slots: slots });
+                window.showMessage("Success", "Booking Cancelled");
+            } catch (e) {
+                console.error(e);
+                window.showMessage("Error", "Could not cancel booking.");
+            }
         };
 
         // Pickup Booking Methods
@@ -1808,6 +1834,16 @@
                         </div>
                         <div style="text-align:right;">
                             <div style="margin-bottom:5px;">Filled: ${volunteers.filter(v => v.role === 'Adult').length} A, ${volunteers.filter(v => v.role === 'Scout').length} S</div>
+                            <!-- Volunteer List -->
+                             <div style="text-align:left; margin-bottom:10px; font-size:0.85rem;">
+                                ${volunteers.map((v, idx) => `
+                                    <div style="margin-bottom:2px; display:flex; justify-content:space-between;">
+                                        <span>${v.name} (${v.role})</span>
+                                        <button onclick="window.removeBoothVolunteer('${b.id}', ${idx})" style="color:#d9534f; background:none; border:none; cursor:pointer; font-weight:bold;">X</button>
+                                    </div>
+                                `).join('')}
+                             </div>
+
                             <button onclick="window.editBooth('${b.id}')" style="cursor:pointer; padding:4px 8px; background:var(--gs-blue); color:white; border:none; border-radius:4px; font-size:0.8rem;">Edit</button>
                             <button onclick="window.deleteBooth('${b.id}')" style="cursor:pointer; padding:4px 8px; background:#d9534f; color:white; border:none; border-radius:4px; font-size:0.8rem; margin-left:5px;">Delete</button>
                         </div>
@@ -2181,6 +2217,26 @@
             } catch (e) {
                 console.error(e);
                 window.showMessage("Error", "Error deleting booth.");
+            }
+        };
+
+        window.removeBoothVolunteer = async (id, idx) => {
+            if (!confirm("Remove this volunteer?")) return;
+
+            const ref = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/booths` : "booths", id);
+            try {
+                const snap = await getDoc(ref);
+                if (!snap.exists()) return;
+
+                let volunteers = snap.data().volunteers || [];
+                // Remove item at index
+                volunteers.splice(idx, 1);
+
+                await updateDoc(ref, { volunteers: volunteers });
+                window.showMessage("Success", "Volunteer Removed");
+            } catch (e) {
+                console.error(e);
+                window.showMessage("Error", "Could not remove volunteer.");
             }
         };
 
