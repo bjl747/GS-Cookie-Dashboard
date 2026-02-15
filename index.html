@@ -621,7 +621,7 @@
             <div
                 style="background:#fff; padding:15px; border-radius:8px; margin-bottom:20px; border:1px solid #ddd; text-align:center;">
                 <span style="font-size:1.2rem; font-weight:bold; color:var(--gs-green);">Price: $72.00 / Case</span>
-                <br><span style="font-size:0.9rem; color:#666;">(12 Boxes per Case)</span>
+                <br><span style="font-size:0.9rem; color:#666;">(12 Boxes per Case — Half cases available!)</span>
             </div>
             <div id="cookie-list" class="cookie-grid"></div>
 
@@ -1223,10 +1223,12 @@
             let count = 0;
             cookies.forEach((_, i) => {
                 const qty = document.getElementById(`qty-${i}`).value;
-                if (qty) count += parseInt(qty);
+                if (qty) count += parseFloat(qty);
             });
-            document.getElementById('totalPrice').innerText = count * CASE_PRICE;
-            document.getElementById('totalCasesDisplay').innerText = count + " Cases";
+            const total = count * CASE_PRICE;
+            document.getElementById('totalPrice').innerText = '$' + total.toFixed(2);
+            const casesLabel = count % 1 === 0 ? count + ' Cases' : count.toFixed(1) + ' Cases';
+            document.getElementById('totalCasesDisplay').innerText = casesLabel;
         };
 
         window.openSignup = (id, loc, time) => {
@@ -1263,7 +1265,7 @@
                     <span class="cookie-name">${cookie}</span>
                     <input type="checkbox" id="chk-${index}" onchange="window.toggleInput(${index})" style="width:20px; height:20px; cursor:pointer;">
                 </div>
-                <input type="number" id="qty-${index}" placeholder="0" disabled min="0" oninput="window.calcTotal()" style="background:#f0f0f0;">
+                <input type="number" id="qty-${index}" placeholder="0" disabled min="0" step="0.5" oninput="window.calcTotal()" style="background:#f0f0f0;">
             </div>
             `;
             }).join('');
@@ -1313,7 +1315,7 @@
                 html += `
                 <div class="stock-input-row">
                     <label style="margin:0;">${c}</label>
-                    <input type="number" id="modal-stock-${i}" class="stock-modal-input" value="${val}" min="0">
+                    <input type="number" id="modal-stock-${i}" class="stock-modal-input" value="${val}" min="0" step="0.5">
                 </div>
             `;
             });
@@ -1329,7 +1331,7 @@
             let newStock = {};
             cookies.forEach((c, i) => {
                 const val = document.getElementById(`modal-stock-${i}`).value;
-                newStock[c] = parseInt(val) || 0;
+                newStock[c] = parseFloat(val) || 0;
             });
 
             const docRef = doc(db, usePreviewPaths ? `artifacts/${appId}/public/data/inventory` : "inventory", "cupboard");
@@ -1478,11 +1480,14 @@
 
             cookies.forEach((cookie, i) => {
                 const qty = document.getElementById(`qty-${i}`).value;
-                if (qty && parseInt(qty) > 0) {
-                    let count = parseInt(qty);
+                if (qty && parseFloat(qty) > 0) {
+                    let count = parseFloat(qty);
+                    // Snap to nearest 0.5
+                    count = Math.round(count * 2) / 2;
                     orderItems[cookie] = count;
                     totalCases += count;
-                    summaryText += `${count}x ${cookie}, `;
+                    const label = count % 1 === 0 ? count : count.toFixed(1);
+                    summaryText += `${label}x ${cookie}, `;
                 }
             });
 
